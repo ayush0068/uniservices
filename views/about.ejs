@@ -1,0 +1,249 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="About UNI-SERVICES — our vision, mission, values, and the people building the future of digital services." />
+  <title>About Us | UNI-SERVICES</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬡</text></svg>" />
+</head>
+<body>
+
+  <!-- ===================== PAGE LOADER ===================== -->
+  <div id="page-loader">
+    <div class="loader-inner">
+      <div class="loader-logo">UNI-SERVICES</div>
+      <div class="loader-bar"><div class="loader-bar-fill"></div></div>
+    </div>
+  </div>
+
+  <!-- BG Orbs -->
+  <div class="bg-orbs" aria-hidden="true">
+    <div class="orb orb-1"></div>
+    <div class="orb orb-2"></div>
+    <div class="orb orb-3"></div>
+  </div>
+
+  <!-- ===================== NAVBAR ========================= -->
+  <!--  navbar.ejs   -->
+    <%- include('navbar') %>
+
+  <div class="nav-mobile">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact">Contact</a>
+  </div>
+
+  <main>
+
+    <!-- ==================== PAGE HERO ==================== -->
+    <section class="page-hero section">
+      <div class="container">
+        <div class="section-tag reveal">Our Story</div>
+        <h1 class="section-title reveal reveal-delay-1" style="font-size:clamp(2.5rem,5vw,4.2rem); text-align:center; max-width:700px; margin:0 auto 1rem;">
+          We're Building the<br /><span class="gradient-text" style="background:var(--gradient-hero);-webkit-background-clip:text;-webkit-text-fill-color:transparent;background-clip:text;">Future of Digital Life</span>
+        </h1>
+        <p class="section-subtitle reveal reveal-delay-2" style="text-align:center;margin:0 auto;">
+          UNI-SERVICES was born from a simple frustration: why should accessing great healthcare, entertainment, and storage require five different apps, five passwords, and five monthly fees?
+        </p>
+      </div>
+    </section>
+
+    <!-- ==================== VISION & MISSION ============= -->
+    <section class="section" style="padding-top:0;">
+      <div class="container">
+        <div class="about-grid">
+
+          <div class="about-block reveal">
+            <div class="about-block-icon">🔭</div>
+            <h3>Our Vision</h3>
+            <p>
+              A world where every person — regardless of geography or income — has frictionless access to world-class healthcare, entertainment, and secure digital infrastructure through one beautifully simple platform.
+            </p>
+            <br />
+            <p>
+              We envision UNI-SERVICES becoming the operating system of everyday digital life: the single trusted layer between people and the services that matter most.
+            </p>
+          </div>
+
+          <div class="about-block reveal reveal-delay-1">
+            <div class="about-block-icon">🎯</div>
+            <h3>Our Mission</h3>
+            <p>
+              To eliminate digital fragmentation by building deeply integrated, privacy-first services that respect users' time, data, and intelligence.
+            </p>
+            <br />
+            <p>
+              We design every product with one principle: <em style="color:var(--accent-cyan);">make the complex feel effortless.</em> From booking a doctor to booking a movie seat to storing a file — everything should feel like second nature.
+            </p>
+          </div>
+
+          <div class="about-block reveal">
+            <div class="about-block-icon">🧭</div>
+            <h3>Our Approach</h3>
+            <p>
+              We build iteratively, listen obsessively, and move with speed without sacrificing craft. Every pixel, every API response, and every support interaction is treated as a product decision.
+            </p>
+          </div>
+
+          <div class="about-block reveal reveal-delay-1">
+            <div class="about-block-icon">🌍</div>
+            <h3>Our Impact</h3>
+            <p>
+              Serving users across 40+ cities, we've enabled 120,000+ doctor consultations, sold 800,000+ event tickets, and securely store over 5 petabytes of personal and enterprise data.
+            </p>
+          </div>
+
+        </div><!-- /about-grid -->
+
+        <!-- ==================== FOUNDER ================== -->
+        <div class="founder-section reveal">
+
+  <div class="founder-avatar-wrap">
+    <div class="founder-avatar">
+      <img src="images/ayush-srivastava.jpeg" alt="Ayush Srivastava" />
+    </div>
+    <div class="founder-badge">Founder</div>
+  </div>
+
+  <div class="founder-content">
+    <div class="founder-tag">A Word From the Founder</div>
+
+    <div class="founder-name">
+      Ayush Srivastava
+    <span class="founder-verified" aria-label="Verified">✓</span>
+    </div>
+
+    <div class="founder-role">
+      Founder & CEO, UNI-SERVICES
+    </div>
+
+    <p class="founder-quote">
+      "I built UNI-SERVICES after spending a frustrating afternoon juggling four different apps just to handle a doctor's appointment follow-up, book a movie for that evening, and back up the prescription photo. The problem wasn't any one app — it was the absence of a cohesive digital experience. We set out to fix that. What we've built is not a bundle of features; it's a philosophy: that technology should reduce friction, not create it. Every decision at UNI-SERVICES starts with the question — does this make the user's day better? If the answer is yes, we build it. If not, we leave it out."
+    </p>
+
+    <div class="founder-signature">
+      — Ayush
+    </div>
+
+  </div>
+
+  
+
+</div><!-- /founder-section -->
+
+<!-- ==================== CO-FOUNDER ================== -->
+        <div class="founder-section founder-section-reverse reveal">
+
+          <div class="founder-content">
+            <div class="founder-tag">A Word From the Co-Founder</div>
+
+            <div class="founder-name">
+              Vishal Yadav
+              <span class="founder-verified">✓</span>
+            </div>
+
+            <div class="founder-role">
+              Co-Founder & COO, UNI-SERVICES
+            </div>
+
+            <p class="founder-quote">
+              "I didn’t start UNI-SERVICES because apps were failing — I started it because they were disconnected. Healthcare, entertainment, and storage all evolved independently, but real life doesn’t operate in silos.
+
+UNI-SERVICES is built on a simple belief: essential digital services should feel connected, not scattered. Our goal isn’t to add more apps to your life — it’s to simplify how they work together.
+
+We design with intention, build with clarity, and focus only on what genuinely adds value."
+            </p>
+
+            <div class="founder-signature">
+              — Vishal
+            </div>
+          </div>
+
+          <div class="founder-avatar-wrap">
+            <div class="founder-avatar">
+              <img src="images/Vishal-Yadav.jpeg" alt="Vishal Yadav" />
+            </div>
+            <div class="founder-badge">Co-Founder</div>
+          </div>
+
+        </div>
+        <!-- /co-founder-section -->
+
+        <!-- ==================== VALUES ================== -->
+        <div>
+          <div class="section-tag reveal" style="margin-bottom:1rem;">Our Values</div>
+          <h2 class="section-title reveal reveal-delay-1" style="margin-bottom:2.5rem;">The Principles We Live By</h2>
+
+          <div class="values-grid">
+            <div class="value-card reveal">
+              <div class="value-num">01</div>
+              <h4>User Obsession</h4>
+              <p>Every decision starts and ends with the user. We track satisfaction metrics daily and treat every complaint as a gift.</p>
+            </div>
+
+            <div class="value-card reveal reveal-delay-1">
+              <div class="value-num">02</div>
+              <h4>Privacy by Default</h4>
+              <p>We don't sell data. We don't show ads. We make money only when users find genuine value in our services.</p>
+            </div>
+
+            <div class="value-card reveal reveal-delay-2">
+              <div class="value-num">03</div>
+              <h4>Craft Over Speed</h4>
+              <p>We'd rather ship something exceptional slowly than something mediocre fast. Quality is non-negotiable.</p>
+            </div>
+
+            <div class="value-card reveal">
+              <div class="value-num">04</div>
+              <h4>Radical Transparency</h4>
+              <p>We publish our uptime, our pricing, our data practices — openly. No dark patterns, no fine print traps.</p>
+            </div>
+
+            <div class="value-card reveal reveal-delay-1">
+              <div class="value-num">05</div>
+              <h4>Inclusive Design</h4>
+              <p>Our products are built for everyone — across ages, abilities, devices, and connectivity conditions.</p>
+            </div>
+
+            <div class="value-card reveal reveal-delay-2">
+              <div class="value-num">06</div>
+              <h4>Long-Term Thinking</h4>
+              <p>We optimize for a 10-year relationship with our users, not a 10-week growth chart. Loyalty is earned, not hacked.</p>
+            </div>
+          </div>
+        </div><!-- /values -->
+
+      </div>
+    </section>
+
+    <!-- ==================== CTA ========================== -->
+    <section class="cta-section section">
+      <div class="container">
+        <div class="cta-box reveal">
+          <div class="section-tag">Join Us</div>
+          <h2 class="section-title">Become Part of the Story</h2>
+          <p class="section-subtitle">
+            We're growing — and we'd love for you to experience what we're building. Start exploring for free.
+          </p>
+          <div class="cta-actions">
+            <a href="/#services" class="btn btn-primary">
+              Explore Services
+              <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+            </a>
+            <a href="/contact" class="btn btn-ghost">Talk to Us</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </main>
+
+  <!-- ===================== FOOTER ========================= -->
+   <!-- inclue footer.ejs -->
+  <%- include('footer') %>
+
+  <script src="script.js"></script>
+</body>
+</html>
