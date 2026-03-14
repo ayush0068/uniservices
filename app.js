@@ -252,7 +252,7 @@ app.get('/admin-login', (req, res) => {
 });
 
 // Login post
-app.post('/admin-login', async (req, res) => {
+app.post('/admin/login', async (req, res) => {
   try {
     const { username, password } = req.body;
     
