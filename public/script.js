@@ -232,3 +232,70 @@ document.querySelectorAll('.service-card').forEach((card, i) => {
 document.querySelectorAll('.why-card').forEach((card, i) => {
   card.style.transitionDelay = `${i * 0.07}s`;
 });
+
+
+/* =============================================
+   THEME TOGGLE — Add inside your <script> block
+   or in a separate JS file
+   ============================================= */
+
+(function () {
+  const STORAGE_KEY = 'uni-theme';
+  const root = document.documentElement;
+
+  // Read saved preference, else check OS preference
+  function getPreferred() {
+    const saved = localStorage.getItem(STORAGE_KEY);
+    if (saved) return saved;
+    return window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light';
+  }
+
+  function applyTheme(theme) {
+    root.setAttribute('data-theme', theme);
+    localStorage.setItem(STORAGE_KEY, theme);
+    // Sync all checkboxes
+    document.querySelectorAll('.theme-toggle input[type="checkbox"]').forEach(cb => {
+      cb.checked = theme === 'dark';
+    });
+  }
+
+  // Apply before paint
+  applyTheme(getPreferred());
+
+  document.addEventListener('DOMContentLoaded', function () {
+    // Listen on all toggle checkboxes
+    document.querySelectorAll('.theme-toggle input[type="checkbox"]').forEach(cb => {
+      cb.addEventListener('change', function () {
+        applyTheme(this.checked ? 'dark' : 'light');
+        // Keep all checkboxes in sync
+        document.querySelectorAll('.theme-toggle input[type="checkbox"]').forEach(other => {
+          if (other !== this) other.checked = this.checked;
+        });
+      });
+    });
+
+    // OS preference change
+    window.matchMedia('(prefers-color-scheme: dark)').addEventListener('change', e => {
+      if (!localStorage.getItem(STORAGE_KEY)) {
+        applyTheme(e.matches ? 'dark' : 'light');
+      }
+    });
+  });
+})();
+
+
+document.addEventListener('DOMContentLoaded', function () {
+  const currentPath = window.location.pathname;
+
+  document.querySelectorAll('.nav-links a, .nav-mobile a').forEach(link => {
+    link.classList.remove('active');
+
+    const linkPath = new URL(link.href, window.location.origin).pathname;
+
+    if (currentPath === '/' && linkPath === '/') {
+      link.classList.add('active');
+    } else if (linkPath !== '/' && currentPath.startsWith(linkPath)) {
+      link.classList.add('active');
+    }
+  });
+});

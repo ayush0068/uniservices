@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= title %> | UNI-SERVICES Admin</title>
+    <link rel="stylesheet" href="admin.css">
+</head>
+<body>
+    <div class="admin-wrapper">
+        <!-- Sidebar -->
+        <aside class="sidebar">
+            <div class="sidebar-header">
+                <h2>UNI-SERVICES</h2>
+                <p>Admin Panel</p>
+            </div>
+            
+            <nav class="sidebar-nav">
+                <a href="/admin-dashboard" class="active">
+                    <span>📊</span> Dashboard
+                </a>
+                <a href="/coming-soon">
+                    <span>📧</span> Contacts
+                    <span class="badge"><%= stats.newContacts %></span>
+                </a>
+                <a href="/coming-soon">
+                    <span>📋</span> Plans
+                </a>
+                <a href="/coming-soon">
+                    <span>👥</span> Admins
+                </a>
+                <a href="/coming-soon">
+                    <span>📝</span> Activity Logs
+                </a>
+                <a href="/coming-soon">
+                    <span>🚪</span> Logout
+                </a>
+            </nav>
+            
+            <div class="sidebar-footer">
+                <p>Logged in as: <strong><%= session.adminUsername %></strong></p>
+                <p>Role: <%= session.adminRole %></p>
+            </div>
+        </aside>
+        
+        <!-- Main Content -->
+        <main class="admin-main">
+            <div class="admin-header">
+                <h1>Dashboard</h1>
+                <div class="admin-actions">
+                    <a href="/" target="_blank" class="btn btn-secondary">View Site</a>
+                </div>
+            </div>
+            
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="stat-value"><%= stats.totalContacts %></div>
+                    <div class="stat-label">Total Contacts</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value"><%= stats.newContacts %></div>
+                    <div class="stat-label">New</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value"><%= stats.readContacts %></div>
+                    <div class="stat-label">Read</div>
+                </div>
+                
+                <div class="stat-card">
+                    <div class="stat-value"><%= stats.repliedContacts %></div>
+                    <div class="stat-label">Replied</div>
+                </div>
+            </div>
+            
+            <!-- Subject Distribution -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Contact by Subject</h2>
+                </div>
+                <div class="card-body">
+                    <div class="subject-stats">
+                        <% stats.subjectStats.forEach(stat => { %>
+                            <div class="subject-item">
+                                <span class="subject-name"><%= stat._id %></span>
+                                <span class="subject-count"><%= stat.count %></span>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- Recent Contacts -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Contacts</h2>
+                    <a href="/admin-contact" class="btn btn-sm">View All</a>
+                </div>
+                <div class="card-body">
+                    <table class="table">
+                        <thead>
+                            <tr>
+                                <th>Name</th>
+                                <th>Email</th>
+                                <th>Subject</th>
+                                <th>Status</th>
+                                <th>Date</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <% recentContacts.forEach(contact => { %>
+                                <tr>
+                                    <td><%= contact.name %></td>
+                                    <td><%= contact.email %></td>
+                                    <td><%= contact.subject %></td>
+                                    <td>
+                                        <span class="status-badge status-<%= contact.status %>">
+                                            <%= contact.status %>
+                                        </span>
+                                    </td>
+                                    <td><%= new Date(contact.createdAt).toLocaleDateString() %></td>
+                                    <td>
+                                        <a href="/admin/contacts/<%= contact._id %>" class="btn btn-sm">View</a>
+                                    </td>
+                                </tr>
+                            <% }) %>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+            
+            <!-- Recent Activity -->
+            <div class="card">
+                <div class="card-header">
+                    <h2>Recent Activity</h2>
+                </div>
+                <div class="card-body">
+                    <div class="activity-log">
+                        <% recentActivity.forEach(log => { %>
+                            <div class="activity-item">
+                                <div class="activity-icon">📌</div>
+                                <div class="activity-details">
+                                    <p><strong><%= log.adminId?.fullName || 'Unknown' %></strong> <%= log.action %></p>
+                                    <p class="activity-meta"><%= log.details %></p>
+                                    <p class="activity-time"><%= new Date(log.createdAt).toLocaleString() %></p>
+                                </div>
+                            </div>
+                        <% }) %>
+                    </div>
+                </div>
+            </div>
+        </main>
+    </div>
+    
+    <script src="admin.js"></script>
+</body>
+</html>

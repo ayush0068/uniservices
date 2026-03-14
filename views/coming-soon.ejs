@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Coming Soon | UNI-SERVICES</title>
+  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="coming-soon.css" />
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬡</text></svg>" />
+  <style>
+    /* Inline fallback vars so page works standalone too */
+    :root {
+      --bg-primary:   #faf9f7;
+      --bg-secondary: #f4f2ef;
+      --bg-card:      #ffffff;
+      --border:       rgba(0,0,0,0.08);
+      --border-hover: rgba(0,0,0,0.18);
+      --accent-primary:  #2d4a3e;
+      --accent-gold:     #c9933a;
+      --accent-muted:    #7c9e8f;
+      --text-primary:    #1a1a18;
+      --text-secondary:  #5a5a54;
+      --text-muted:      #9a9a92;
+      --text-inverse:    #faf9f7;
+      --font-display: 'Playfair Display', Georgia, serif;
+      --font-body:    'Inter', -apple-system, sans-serif;
+      --gradient-hero: linear-gradient(135deg,#2d4a3e 0%,#4a7c6b 50%,#c9933a 100%);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.09);
+    }
+    [data-theme="dark"] {
+      --bg-primary:   #04060f;
+      --bg-secondary: #080c1a;
+      --bg-card:      rgba(255,255,255,0.04);
+      --border:       rgba(255,255,255,0.09);
+      --border-hover: rgba(255,255,255,0.22);
+      --accent-primary:  #5fad8e;
+      --accent-gold:     #e8b86d;
+      --text-primary:    #eef0f8;
+      --text-secondary:  #8b90a8;
+      --text-muted:      #4a5070;
+      --text-inverse:    #04060f;
+      --gradient-hero: linear-gradient(135deg,#5fad8e 0%,#3d8a70 50%,#e8b86d 100%);
+      --shadow-md: 0 8px 24px rgba(0,0,0,0.55);
+    }
+  </style>
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+</head>
+<body class="cs-body">
+
+  <!-- Orbs -->
+  <div class="cs-orbs" aria-hidden="true">
+    <div class="cs-orb cs-orb-1"></div>
+    <div class="cs-orb cs-orb-2"></div>
+    <div class="cs-orb cs-orb-3"></div>
+  </div>
+
+  <!-- Particle canvas -->
+  <canvas id="cs-canvas" aria-hidden="true"></canvas>
+
+  <main class="cs-main">
+
+    <!-- Logo -->
+    <a href="/" class="cs-logo" aria-label="UNI-SERVICES home">UNI-SERVICES</a>
+
+    <!-- Badge -->
+    <div class="cs-badge">
+      <span class="cs-badge-dot"></span>
+      Something big is coming
+    </div>
+
+    <!-- Heading -->
+    <h1 class="cs-title">
+      We're Crafting<br/>
+      <span class="cs-title-accent">Something Remarkable</span>
+    </h1>
+
+    <p class="cs-subtitle">
+      Our team is putting the final touches on an experience<br class="cs-br"/>
+      that will change how you think about service.
+    </p>
+
+    <!-- Countdown -->
+    <div class="cs-countdown" id="cs-countdown" aria-live="polite">
+      <div class="cs-unit">
+        <div class="cs-num" id="cs-days">00</div>
+        <div class="cs-unit-label">Days</div>
+      </div>
+      <div class="cs-sep">:</div>
+      <div class="cs-unit">
+        <div class="cs-num" id="cs-hours">00</div>
+        <div class="cs-unit-label">Hours</div>
+      </div>
+      <div class="cs-sep">:</div>
+      <div class="cs-unit">
+        <div class="cs-num" id="cs-mins">00</div>
+        <div class="cs-unit-label">Minutes</div>
+      </div>
+      <div class="cs-sep">:</div>
+      <div class="cs-unit">
+        <div class="cs-num" id="cs-secs">00</div>
+        <div class="cs-unit-label">Seconds</div>
+      </div>
+    </div>
+
+    <!-- Progress bar -->
+    <div class="cs-progress-wrap" aria-label="Launch progress">
+      <div class="cs-progress-bar">
+        <div class="cs-progress-fill" id="cs-progress-fill"></div>
+        <div class="cs-progress-glow"></div>
+      </div>
+      <div class="cs-progress-label">
+        <span>Progress</span>
+        <span id="cs-progress-pct">78%</span>
+      </div>
+    </div>
+
+    <!-- Email notify -->
+    <form class="cs-form" id="cs-form" novalidate>
+      <div class="cs-input-wrap">
+        <svg class="cs-input-icon" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="2" y="4" width="20" height="16" rx="2"/><polyline points="2,4 12,14 22,4"/></svg>
+        <input
+          type="email"
+          class="cs-input"
+          id="cs-email"
+          placeholder="Enter your email to get notified"
+          autocomplete="email"
+        />
+      </div>
+      <button type="submit" class="cs-btn">
+        Notify Me
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </button>
+    </form>
+    <p class="cs-form-success" id="cs-success" aria-live="polite">
+      ✓ You're on the list! We'll reach out soon.
+    </p>
+
+    <!-- Services chips -->
+    <div class="cs-chips">
+      <div class="cs-chip">🩺 UniCare+</div>
+      <div class="cs-chip">🎬 UniShow</div>
+      <div class="cs-chip">☁️ UniSpace</div>
+    </div>
+
+    <!-- Footer line -->
+    <p class="cs-foot">
+      © 2025 UNI-SERVICES &nbsp;·&nbsp;
+      <a href="mailto:uniservices013@gmail.com">uniservices013@gmail.com</a>
+    </p>
+
+  </main>
+
+  <script>
+  (function () {
+
+    /* ── Theme sync ── */
+    const STORAGE_KEY = 'uni-theme';
+    const root = document.documentElement;
+    const saved = localStorage.getItem(STORAGE_KEY);
+    const preferred = saved || (window.matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+    root.setAttribute('data-theme', preferred);
+
+    /* ── Countdown — set your launch date here ── */
+    const LAUNCH = new Date('2025-12-31T00:00:00');
+
+    function pad(n) { return String(n).padStart(2, '0'); }
+
+    function tick() {
+      const now  = new Date();
+      const diff = Math.max(0, LAUNCH - now);
+      const d = Math.floor(diff / 864e5);
+      const h = Math.floor((diff % 864e5) / 36e5);
+      const m = Math.floor((diff % 36e5)  / 6e4);
+      const s = Math.floor((diff % 6e4)   / 1e3);
+
+      const set = (id, val, prev) => {
+        const el = document.getElementById(id);
+        if (!el) return val;
+        const cur = el.textContent;
+        const next = pad(val);
+        if (cur !== next) {
+          el.classList.remove('cs-flip');
+          void el.offsetWidth;
+          el.classList.add('cs-flip');
+          el.textContent = next;
+        }
+        return next;
+      };
+      set('cs-days',  d);
+      set('cs-hours', h);
+      set('cs-mins',  m);
+      set('cs-secs',  s);
+    }
+    tick();
+    setInterval(tick, 1000);
+
+    /* ── Progress bar ── */
+    const PCT = 78;
+    setTimeout(() => {
+      const fill = document.getElementById('cs-progress-fill');
+      if (fill) fill.style.width = PCT + '%';
+    }, 400);
+
+    /* ── Email form ── */
+    document.getElementById('cs-form').addEventListener('submit', function (e) {
+      e.preventDefault();
+      const email = document.getElementById('cs-email').value.trim();
+      if (!email || !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
+        document.getElementById('cs-email').classList.add('cs-input--error');
+        setTimeout(() => document.getElementById('cs-email').classList.remove('cs-input--error'), 1200);
+        return;
+      }
+      this.style.display = 'none';
+      document.getElementById('cs-success').classList.add('cs-success--visible');
+    });
+
+    /* ── Canvas particles ── */
+    const canvas = document.getElementById('cs-canvas');
+    const ctx    = canvas.getContext('2d');
+    let W, H, particles = [];
+
+    function resize() {
+      W = canvas.width  = window.innerWidth;
+      H = canvas.height = window.innerHeight;
+    }
+    resize();
+    window.addEventListener('resize', resize);
+
+    function isDark() {
+      return root.getAttribute('data-theme') === 'dark';
+    }
+
+    class Particle {
+      constructor() { this.reset(true); }
+      reset(init) {
+        this.x  = Math.random() * W;
+        this.y  = init ? Math.random() * H : H + 10;
+        this.r  = Math.random() * 1.5 + 0.4;
+        this.vx = (Math.random() - 0.5) * 0.3;
+        this.vy = -(Math.random() * 0.5 + 0.15);
+        this.alpha = 0;
+        this.maxAlpha = Math.random() * 0.35 + 0.08;
+        this.life = 0;
+        this.maxLife = Math.random() * 300 + 180;
+      }
+      update() {
+        this.x += this.vx;
+        this.y += this.vy;
+        this.life++;
+        const half = this.maxLife / 2;
+        this.alpha = this.life < half
+          ? (this.life / half) * this.maxAlpha
+          : ((this.maxLife - this.life) / half) * this.maxAlpha;
+        if (this.life >= this.maxLife) this.reset(false);
+      }
+      draw() {
+        const dark = isDark();
+        ctx.beginPath();
+        ctx.arc(this.x, this.y, this.r, 0, Math.PI * 2);
+        ctx.fillStyle = dark
+          ? `rgba(95,173,142,${this.alpha})`
+          : `rgba(45,74,62,${this.alpha})`;
+        ctx.fill();
+      }
+    }
+
+    for (let i = 0; i < 90; i++) particles.push(new Particle());
+
+    function loop() {
+      ctx.clearRect(0, 0, W, H);
+      particles.forEach(p => { p.update(); p.draw(); });
+      requestAnimationFrame(loop);
+    }
+    loop();
+
+    /* ── Entrance animations ── */
+    const els = document.querySelectorAll('.cs-logo,.cs-badge,.cs-title,.cs-subtitle,.cs-countdown,.cs-progress-wrap,.cs-form,.cs-chips,.cs-foot');
+    els.forEach((el, i) => {
+      el.style.opacity = '0';
+      el.style.transform = 'translateY(24px)';
+      el.style.transition = `opacity .65s ease ${i * 0.08}s, transform .65s ease ${i * 0.08}s`;
+      setTimeout(() => {
+        el.style.opacity = '';
+        el.style.transform = '';
+      }, 80 + i * 80);
+    });
+
+  })();
+  </script>
+</body>
+</html>
