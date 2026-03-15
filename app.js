@@ -47,11 +47,12 @@ const Contact = mongoose.model('Contact', contactSchema);
 const transporter = nodemailer.createTransport({
   host: "smtp.gmail.com",
   port: 587,
-  secure: true,
+  secure: false,
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD
-  }
+  },
+  family: 4
 });
 
 /* ── Admin Auth Guard ── */
