@@ -3,33 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Contact UNI-SERVICES — reach out for support, partnerships, or general enquiries." />
-  <title>Contact | UNI-SERVICES</title>
+  <meta name="description" content="Contact <%= settings.siteName %> — reach out for support, partnerships, or general enquiries." />
+  <title>Contact | <%= settings.siteName %></title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬡</text></svg>" />
 </head>
 <body>
 
-  <!-- ===================== PAGE LOADER ===================== -->
   <div id="page-loader">
     <div class="loader-inner">
-      <div class="loader-logo">UNI-SERVICES</div>
+      <div class="loader-logo"><%= settings.siteName %></div>
       <div class="loader-bar"><div class="loader-bar-fill"></div></div>
     </div>
   </div>
 
-  <!-- BG Orbs -->
   <div class="bg-orbs" aria-hidden="true">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
   </div>
 
-  <!-- ===================== NAVBAR ========================= -->
-  <!--  navbar.ejs   -->
-    <%- include('navbar') %>
+  <%- include('navbar') %>
 
-  <div class="nav-mobile">
+  <div class="nav-mobile" id="navMobile">
     <a href="/">Home</a>
     <a href="/about">About</a>
     <a href="/contact" class="nav-cta">Get in Touch</a>
@@ -37,14 +33,13 @@
 
   <main>
 
-    <!-- ==================== PAGE HERO ==================== -->
+    <!-- PAGE HERO -->
     <section class="page-hero section">
       <div class="container">
         <div class="section-tag reveal">Contact Us</div>
         <h1 class="section-title reveal reveal-delay-1"
-          style="font-size:clamp(2.5rem,5vw,4rem); text-align:center; max-width:640px; margin:0 auto 1rem; line-height:1.15;">
-          Let's Start a <span class="gradient-text"
-            >Conversation</span>
+          style="font-size:clamp(2.5rem,5vw,4rem);text-align:center;max-width:640px;margin:0 auto 1rem;line-height:1.15;">
+          Let's Start a <span class="gradient-text">Conversation</span>
         </h1>
         <p class="section-subtitle reveal reveal-delay-2" style="text-align:center;margin:0 auto;">
           Whether you have a question, want to partner with us, or just want to say hello — we're all ears. Expect a reply within 24 hours.
@@ -52,7 +47,7 @@
       </div>
     </section>
 
-    <!-- ==================== CONTACT SECTION ============= -->
+    <!-- CONTACT SECTION -->
     <section class="section" style="padding-top:0;">
       <div class="container">
         <div class="contact-wrapper">
@@ -66,11 +61,14 @@
             </p>
 
             <div class="contact-methods">
+
               <div class="contact-method">
                 <div class="method-icon">✉️</div>
                 <div>
                   <div class="method-label">Email</div>
-                  <div class="method-value">uniservices013@gmail.com</div>
+                  <div class="method-value">
+                    <a href="mailto:<%= settings.publicEmail %>" style="color:inherit"><%= settings.publicEmail %></a>
+                  </div>
                 </div>
               </div>
 
@@ -78,7 +76,9 @@
                 <div class="method-icon">📞</div>
                 <div>
                   <div class="method-label">Phone</div>
-                  <div class="method-value">+91 8931878476</div>
+                  <div class="method-value">
+                    <a href="tel:<%= settings.publicPhone.replace(/\s/g,'') %>" style="color:inherit"><%= settings.publicPhone %></a>
+                  </div>
                 </div>
               </div>
 
@@ -86,7 +86,7 @@
                 <div class="method-icon">📍</div>
                 <div>
                   <div class="method-label">Headquarters</div>
-                  <div class="method-value">Prayagraj, Uttar Pradesh, India</div>
+                  <div class="method-value"><%= settings.address %></div>
                 </div>
               </div>
 
@@ -94,30 +94,34 @@
                 <div class="method-icon">🕐</div>
                 <div>
                   <div class="method-label">Support Hours</div>
-                  <div class="method-value">24 / 7 · 365 days a year</div>
+                  <div class="method-value"><%= settings.supportHours %></div>
                 </div>
               </div>
-            </div><!-- /contact-methods -->
 
-            <!-- Services quick links -->
+            </div>
+
+            <!-- Service quick links -->
             <div style="margin-top:2.5rem;">
               <div class="section-tag" style="margin-bottom:1rem;">Service Support</div>
               <div style="display:flex;flex-direction:column;gap:0.65rem;">
-                <a href="https://unicare.example.com" target="_blank" rel="noopener"
-                   style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--text-muted);transition:color 0.2s;">
+                <% if (settings.svc_unicare) { %>
+                <a href="/unicare" style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--text-muted);transition:color 0.2s;">
                   🩺 <span>UniCare+ Support Portal</span>
                   <svg style="margin-left:auto;width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 </a>
-                <a href="https://unishow.example.com" target="_blank" rel="noopener"
-                   style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--text-muted);transition:color 0.2s;">
+                <% } %>
+                <% if (settings.svc_unishow) { %>
+                <a href="/unishow" style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--text-muted);transition:color 0.2s;">
                   🎬 <span>UniShow Help Center</span>
                   <svg style="margin-left:auto;width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 </a>
-                <a href="https://unispace.example.com" target="_blank" rel="noopener"
-                   style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--text-muted);transition:color 0.2s;">
+                <% } %>
+                <% if (settings.svc_unispace) { %>
+                <a href="https://unispace-z8bd.onrender.com/" target="_blank" rel="noopener" style="display:flex;align-items:center;gap:10px;font-size:0.88rem;color:var(--text-muted);transition:color 0.2s;">
                   ☁️ <span>UniSpace Technical Docs</span>
                   <svg style="margin-left:auto;width:14px;height:14px;" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
                 </a>
+                <% } %>
               </div>
             </div>
 
@@ -127,54 +131,30 @@
           <div class="contact-form-box reveal reveal-delay-1">
             <h3 class="form-title">Send us a Message</h3>
 
-            <!-- Form -->
             <form id="contact-form" action="/contact" method="POST">
-
               <div class="form-row">
-                <!-- Name -->
                 <div class="form-group">
                   <label for="f-name">Full Name <span style="color:#ef4444;">*</span></label>
-                  <input
-                    type="text"
-                    id="f-name"
-                    name="name"
-                    class="form-control"
-                    placeholder="Ayush Srivastava"
-                    autocomplete="name"
-                    maxlength="80"
-                  />
+                  <input type="text" id="f-name" name="name" class="form-control"
+                    placeholder="Ayush Srivastava" autocomplete="name" maxlength="80"/>
                   <div class="form-error" id="err-name" role="alert">This field is required.</div>
                 </div>
-
-                <!-- Email -->
                 <div class="form-group">
                   <label for="f-email">Email Address <span style="color:#ef4444;">*</span></label>
-                  <input
-                    type="email"
-                    id="f-email"
-                    name="email"
-                    class="form-control"
-                    placeholder="arjun@company.com"
-                    autocomplete="email"
-                    maxlength="120"
-                  />
+                  <input type="email" id="f-email" name="email" class="form-control"
+                    placeholder="arjun@company.com" autocomplete="email" maxlength="120"/>
                   <div class="form-error" id="err-email" role="alert">Enter a valid email.</div>
                 </div>
               </div>
 
-              <!-- Subject / Service -->
               <div class="form-group">
                 <label for="f-subject">Subject / Service <span style="color:#ef4444;">*</span></label>
-                <select
-                  id="f-subject"
-                  name="subject"
-                  class="form-control form-select"
-                >
+                <select id="f-subject" name="subject" class="form-control form-select">
                   <option value="">— Select a topic —</option>
                   <option value="general">General Enquiry</option>
-                  <option value="unicare">UniCare+ Support</option>
-                  <option value="unishow">UniShow Ticketing</option>
-                  <option value="unispace">UniSpace Storage</option>
+                  <% if (settings.svc_unicare) { %><option value="unicare">UniCare+ Support</option><% } %>
+                  <% if (settings.svc_unishow) { %><option value="unishow">UniShow Ticketing</option><% } %>
+                  <% if (settings.svc_unispace) { %><option value="unispace">UniSpace Storage</option><% } %>
                   <option value="partnership">Partnership / B2B</option>
                   <option value="press">Press &amp; Media</option>
                   <option value="careers">Careers</option>
@@ -182,44 +162,35 @@
                 <div class="form-error" id="err-subject" role="alert">Please select a topic.</div>
               </div>
 
-              <!-- Message -->
               <div class="form-group">
                 <label for="f-message">Your Message <span style="color:#ef4444;">*</span></label>
-                <textarea
-                  id="f-message"
-                  name="message"
-                  class="form-control"
-                  rows="6"
+                <textarea id="f-message" name="message" class="form-control" rows="6"
                   placeholder="Tell us how we can help. The more detail, the faster we can respond…"
-                  maxlength="2000"
-                ></textarea>
+                  maxlength="2000"></textarea>
                 <div class="form-error" id="err-message" role="alert">Message must be at least 20 characters.</div>
               </div>
 
-              <!-- Submit -->
               <div class="form-submit-wrap">
                 <button type="submit" class="btn btn-primary btn-submit">
                   Send Message
                   <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
                 </button>
               </div>
+            </form>
 
-            </form><!-- /contact-form -->
-
-            <!-- Success Message (shown after submit) -->
             <div id="form-success" class="success-message" aria-live="polite">
               <div class="success-icon">✅</div>
               <h3>Message Sent!</h3>
               <p>Thanks for reaching out. We'll get back to you within 24 hours.</p>
             </div>
 
-          </div><!-- /contact-form-box -->
+          </div>
 
-        </div><!-- /contact-wrapper -->
+        </div>
       </div>
     </section>
 
-    <!-- ==================== CTA ========================== -->
+    <!-- CTA -->
     <section class="cta-section section">
       <div class="container">
         <div class="cta-box reveal">
@@ -233,7 +204,7 @@
               View All Services
               <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
             </a>
-            <a href="/about" class="btn btn-ghost">About UNI-SERVICES</a>
+            <a href="/about" class="btn btn-ghost">About <%= settings.siteName %></a>
           </div>
         </div>
       </div>
@@ -241,12 +212,8 @@
 
   </main>
 
-  <!-- ===================== FOOTER ========================= -->
-   <!-- inclue footer.ejs -->
   <%- include('footer') %>
 
-
-  <!-- Custom Popup -->
   <div id="custom-popup" class="custom-popup">
     <div class="popup-box">
       <div class="popup-icon">🚀</div>

@@ -962,6 +962,252 @@ select.filter-select option{background:var(--card)}
     </div>
   </div>
 
+  <div class="settings-section">
+  <div class="sec-head" onclick="sToggle(this)">
+    <div class="sec-head-icon" style="background:rgba(59,111,212,0.1)">🧩</div>
+    <div class="sec-head-text">
+      <h3>Services Management</h3>
+      <p>Add, edit, reorder or remove services shown on home page</p>
+    </div>
+    <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+  </div>
+  <div class="sec-body">
+
+    <!-- Services list -->
+    <div id="svc-list" style="padding:0.5rem 0"></div>
+
+    <!-- Add new service button -->
+    <div style="padding:1rem 1.4rem;border-top:1px solid var(--border)">
+      <button class="s-btn s-btn--primary" onclick="svcOpenModal()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="12" y1="5" x2="12" y2="19"/><line x1="5" y1="12" x2="19" y2="12"/></svg>
+        Add New Service
+      </button>
+    </div>
+
+  </div>
+</div>
+
+
+<!-- ── Service Modal ── -->
+<!-- admin.ejs mein id="svc-modal" wala poora div replace karo -->
+
+<div id="svc-modal" style="display:none;position:fixed;inset:0;background:rgba(0,0,0,0.55);backdrop-filter:blur(6px);z-index:9000;align-items:center;justify-content:center;padding:1rem;">
+  <div style="
+    background:var(--card);
+    border:1px solid var(--border2);
+    border-radius:20px;
+    width:100%;max-width:560px;
+    max-height:88vh;overflow-y:auto;
+    box-shadow:var(--shadow-md);
+    animation:fadeUp 0.3s ease;
+  ">
+
+    <!-- Header -->
+    <div style="
+      display:flex;align-items:center;justify-content:space-between;
+      padding:1.4rem 1.75rem;
+      border-bottom:1px solid var(--border);
+      position:sticky;top:0;
+      background:var(--card);
+      border-radius:20px 20px 0 0;
+      z-index:1;
+    ">
+      <div>
+        <div style="font-family:var(--serif);font-size:1.05rem;font-weight:700;color:var(--t1)" id="svc-modal-title">Add New Service</div>
+        <div style="font-size:0.72rem;color:var(--t3);margin-top:2px">Fill in the details below and save</div>
+      </div>
+      <button onclick="svcCloseModal()" style="
+        width:32px;height:32px;border-radius:8px;
+        border:1px solid var(--border);
+        background:transparent;cursor:pointer;
+        display:flex;align-items:center;justify-content:center;
+        color:var(--t3);
+        transition:all 0.2s ease;
+      "
+      onmouseover="this.style.borderColor='#c0392b';this.style.color='#c0392b';this.style.background='rgba(192,57,43,0.08)'"
+      onmouseout="this.style.borderColor='var(--border)';this.style.color='var(--t3)';this.style.background='transparent'">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <input type="hidden" id="svc-edit-id"/>
+
+    <!-- Body -->
+    <div style="padding:1.5rem 1.75rem;display:flex;flex-direction:column;gap:1.1rem;">
+
+      <!-- Row 1: Name + Slug -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div>
+          <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">
+            Service Name <span style="color:#c0392b">*</span>
+          </label>
+          <input id="svc-name"
+            style="width:100%;height:38px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;transition:border-color 0.2s,box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+            placeholder="e.g. UniCare+"/>
+        </div>
+        <div>
+          <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">
+            Slug <span style="color:#c0392b">*</span>
+            <span style="font-weight:400;color:var(--t3);font-size:0.68rem;">(unique ID)</span>
+          </label>
+          <input id="svc-slug"
+            style="width:100%;height:38px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;transition:border-color 0.2s,box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+            placeholder="e.g. unicare"/>
+        </div>
+      </div>
+
+      <!-- Row 2: Icon + Badge -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div>
+          <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">Icon (emoji)</label>
+          <input id="svc-icon"
+            style="width:100%;height:38px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.85rem;font-family:var(--font);font-size:1.1rem;color:var(--t1);outline:none;transition:border-color 0.2s,box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+            placeholder="🩺"/>
+        </div>
+        <div>
+          <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">Badge Text</label>
+          <input id="svc-badge"
+            style="width:100%;height:38px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;transition:border-color 0.2s,box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+            placeholder="e.g. Health & Wellness"/>
+        </div>
+      </div>
+
+      <!-- Row 3: Link -->
+      <div>
+        <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">
+          Link (href) <span style="color:#c0392b">*</span>
+        </label>
+        <input id="svc-href"
+          style="width:100%;height:38px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;transition:border-color 0.2s,box-shadow 0.2s;"
+          onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+          onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+          placeholder="/unicare  or  https://external-url.com"/>
+      </div>
+
+      <!-- Row 4: Description -->
+      <div>
+        <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">Description</label>
+        <textarea id="svc-desc" rows="3"
+          style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0.65rem 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;resize:vertical;line-height:1.6;transition:border-color 0.2s,box-shadow 0.2s;"
+          onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+          onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+          placeholder="Short description of the service…"></textarea>
+      </div>
+
+      <!-- Row 5: Features -->
+      <div>
+        <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:4px;">
+          Features
+          <span style="font-weight:400;color:var(--t3);font-size:0.68rem;">one per line, max 3</span>
+        </label>
+        <textarea id="svc-features" rows="3"
+          style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0.65rem 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;resize:vertical;line-height:1.7;transition:border-color 0.2s,box-shadow 0.2s;"
+          onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+          onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+          placeholder="Instant video consultations&#10;500+ verified specialists&#10;Digital prescriptions & reports"></textarea>
+      </div>
+
+      <!-- Row 6: Theme + Order -->
+      <div style="display:grid;grid-template-columns:1fr 1fr;gap:1rem;">
+        <div>
+          <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">Theme Color</label>
+          <select id="svc-theme" onchange="svcUpdateTheme(this.value)"
+            style="width:100%;height:38px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 2rem 0 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;appearance:none;
+            background-image:url('data:image/svg+xml,%3Csvg xmlns=%27http://www.w3.org/2000/svg%27 width=%2714%27 height=%2714%27 viewBox=%270 0 24 24%27 fill=%27none%27 stroke=%27%23888%27 stroke-width=%272%27%3E%3Cpolyline points=%276 9 12 15 18 9%27/%3E%3C/svg%3E');
+            background-repeat:no-repeat;background-position:right 10px center;cursor:pointer;">
+            <option value="cyan">🟢 Green</option>
+            <option value="amber">🟡 Gold / Amber</option>
+            <option value="emerald">🟠 Rose / Emerald</option>
+            <option value="blue">🔵 Blue</option>
+            <option value="purple">🟣 Purple</option>
+          </select>
+        </div>
+        <div>
+          <label style="display:block;font-size:0.74rem;font-weight:600;letter-spacing:0.05em;color:var(--t2);margin-bottom:6px;">
+            Display Order
+            <span style="font-weight:400;color:var(--t3);font-size:0.68rem;">1 = first</span>
+          </label>
+          <input id="svc-order" type="number" min="1" max="99"
+            style="width:100%;height:38px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.85rem;font-family:var(--font);font-size:0.84rem;color:var(--t1);outline:none;transition:border-color 0.2s,box-shadow 0.2s;"
+            onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.12)'"
+            onblur="this.style.borderColor='var(--border)';this.style.boxShadow='none'"
+            placeholder="1"/>
+        </div>
+      </div>
+
+      <!-- External link toggle -->
+      <div style="
+        display:flex;align-items:center;gap:12px;
+        padding:0.85rem 1rem;
+        background:var(--bg2);
+        border:1px solid var(--border);
+        border-radius:10px;
+      ">
+        <label class="ssw" style="flex-shrink:0">
+          <input type="checkbox" id="svc-external">
+          <div class="ssw-track"></div>
+          <div class="ssw-thumb"></div>
+        </label>
+        <div>
+          <div style="font-size:0.84rem;font-weight:600;color:var(--t1)">External Link</div>
+          <div style="font-size:0.72rem;color:var(--t3)">Opens in a new tab — use for external URLs like https://…</div>
+        </div>
+      </div>
+
+    </div><!-- /body -->
+
+    <!-- Footer -->
+    <div style="
+      display:flex;align-items:center;gap:0.65rem;
+      padding:1.1rem 1.75rem;
+      border-top:1px solid var(--border);
+      position:sticky;bottom:0;
+      background:var(--card);
+      border-radius:0 0 20px 20px;
+    ">
+      <button id="svc-save-btn" onclick="svcSave()" style="
+        display:inline-flex;align-items:center;gap:7px;
+        padding:0.6rem 1.4rem;
+        background:var(--green);color:var(--inv);
+        border:none;border-radius:9px;
+        font-family:var(--font);font-size:0.84rem;font-weight:600;
+        cursor:pointer;
+        box-shadow:0 2px 8px rgba(45,74,62,0.25);
+        transition:all 0.2s ease;
+      "
+      onmouseover="this.style.background='var(--green2)';this.style.transform='translateY(-1px)'"
+      onmouseout="this.style.background='var(--green)';this.style.transform='translateY(0)'">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save Service
+      </button>
+      <button onclick="svcCloseModal()" style="
+        display:inline-flex;align-items:center;gap:7px;
+        padding:0.6rem 1.2rem;
+        background:transparent;
+        border:1px solid var(--border2);
+        border-radius:9px;
+        font-family:var(--font);font-size:0.84rem;font-weight:500;
+        color:var(--t2);cursor:pointer;
+        transition:all 0.2s ease;
+      "
+      onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'"
+      onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--t2)'">
+        Cancel
+      </button>
+      <span style="margin-left:auto;font-size:0.72rem;color:var(--t3)" id="svc-modal-hint">* Required fields</span>
+    </div>
+
+  </div>
+</div>
+
   <!-- 9. Danger Zone -->
   <div class="settings-section danger">
     <div class="sec-head" onclick="sToggle(this)">
@@ -1395,13 +1641,109 @@ function sToggleMaint(on){
   sToast(on?'⚠ Maintenance mode ON':'Maintenance mode OFF');
 }
 
-function sSettingsSaveAll(){
-  const s=sGet();
-  s.savedAt=new Date().toLocaleTimeString('en-IN');
-  sSet(s);
-  document.getElementById('ss-lastsaved').textContent=s.savedAt;
-  sToast('All settings saved!');
+/* admin.ejs ke settings JS mein sSettingsSaveAll function replace karo */
+
+/* ── Load settings from DB on page open ── */
+async function sLoadFromDB() {
+  try {
+    const res = await fetch('/api/admin/settings');
+    const d = await res.json();
+    if (!d.success) return;
+    const s = d.settings;
+
+    /* Site Identity */
+    const sn = document.querySelector('#page-settings input[onchange*="siteName"]');
+    if (sn) sn.value = s.siteName || 'UNI-SERVICES';
+
+    const tl = document.querySelector('#page-settings input[onchange*="tagline"]');
+    if (tl) tl.value = s.tagline || 'Your Digital Ecosystem';
+
+    const ft = document.querySelector('#page-settings input[onchange*="footerTagline"]');
+    if (ft) ft.value = s.footerTagline || '';
+
+    const cy = document.querySelector('#page-settings input[onchange*="copyrightYear"]');
+    if (cy) cy.value = s.copyrightYear || '2025';
+
+    /* Contact Info */
+    const pe = document.querySelector('#page-settings input[onchange*="publicEmail"]');
+    if (pe) pe.value = s.publicEmail || '';
+
+    const pp = document.querySelector('#page-settings input[onchange*="publicPhone"]');
+    if (pp) pp.value = s.publicPhone || '';
+
+    const ad = document.querySelector('#page-settings input[onchange*="address"]');
+    if (ad) ad.value = s.address || '';
+
+    const sh = document.querySelector('#page-settings input[onchange*="supportHours"]');
+    if (sh) sh.value = s.supportHours || '';
+
+    /* Notifications */
+    const ne = document.querySelector('#page-settings input[onchange*="notifEmail"]');
+    if (ne) ne.value = s.notifEmail || '';
+
+    /* Maintenance */
+    const mt = document.getElementById('ss-maint');
+    if (mt && s.maintenance) { mt.checked = true; sToggleMaint(true); }
+
+    /* Meta desc */
+    const md = document.getElementById('ss-meta');
+    if (md && s.metaDesc) {
+      md.value = s.metaDesc;
+      const mc = document.getElementById('ss-metacount');
+      if (mc) mc.textContent = md.value.length + ' / 160';
+    }
+
+    document.getElementById('ss-lastsaved').textContent = 'Loaded from database';
+  } catch (e) {
+    console.error('Failed to load settings', e);
+  }
 }
+
+/* ── Save ALL settings to DB ── */
+async function sSettingsSaveAll() {
+  const btn = document.querySelector('#page-settings .btn-primary');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+
+  /* Collect all current values */
+  const payload = { ...sGet() };
+
+  /* Also grab live input values */
+  const inputs = document.querySelectorAll('#page-settings input, #page-settings select, #page-settings textarea');
+  inputs.forEach(el => {
+    const match = el.getAttribute('onchange') || el.getAttribute('oninput') || '';
+    const keyMatch = match.match(/sSave\(['"]([^'"]+)['"]/);
+    if (keyMatch) {
+      payload[keyMatch[1]] = el.type === 'checkbox' ? el.checked : el.value;
+    }
+  });
+
+  try {
+    const res = await fetch('/api/admin/settings', {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const d = await res.json();
+
+    if (d.success) {
+      sToast('✓ Settings saved to database!');
+      document.getElementById('ss-lastsaved').textContent = new Date().toLocaleTimeString('en-IN');
+    } else {
+      sToast(d.message || 'Failed to save', true);
+    }
+  } catch (e) {
+    sToast('Network error — check connection', true);
+  }
+
+  if (btn) { btn.disabled = false; btn.innerHTML = `<svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg> Save All`; }
+}
+
+/* ── Init — load from DB when settings page opens ── */
+const origGoTo = goTo;
+goTo = function(name) {
+  origGoTo(name);
+  if (name === 'settings') sLoadFromDB();
+};
 
 function sLoadSettings(){
   if(!confirm('Revert all settings to defaults?'))return;
@@ -1434,6 +1776,244 @@ function sDanger(action){
   if(s.savedAt)document.getElementById('ss-lastsaved').textContent=s.savedAt;
   if(s.siteName){const el=document.querySelector('#page-settings input[onchange*="siteName"]');if(el)el.value=s.siteName}
   if(s.maintenance){const el=document.getElementById('ss-maint');if(el){el.checked=true;sToggleMaint(true)}}
+})();
+
+/* ══════════════════════════════════════
+   SERVICES MANAGEMENT
+══════════════════════════════════════ */
+
+const SVC_THEMES = {
+  cyan:    { badge:'badge-cyan',    accent:'card-unicare',  icon:'icon-cyan',    link:'link-cyan',    dot:'dot-cyan'    },
+  amber:   { badge:'badge-amber',   accent:'card-unishow',  icon:'icon-amber',   link:'link-amber',   dot:'dot-amber'   },
+  emerald: { badge:'badge-emerald', accent:'card-unispace', icon:'icon-emerald', link:'link-emerald', dot:'dot-emerald' },
+  blue:    { badge:'badge-blue',    accent:'card-blue',     icon:'icon-blue',    link:'link-blue',    dot:'dot-blue'    },
+  purple:  { badge:'badge-purple',  accent:'card-purple',   icon:'icon-purple',  link:'link-purple',  dot:'dot-purple'  },
+};
+
+let svcCurrentTheme = 'cyan';
+function svcUpdateTheme(val){ svcCurrentTheme = val; }
+
+/* Load services list */
+async function svcLoadList() {
+  const list = document.getElementById('svc-list');
+  if (!list) return;
+  list.innerHTML = '<div style="padding:1rem 1.4rem;font-size:0.8rem;color:var(--t3)">Loading…</div>';
+
+  try {
+    const res  = await fetch('/api/admin/services');
+    const data = await res.json();
+
+    if (!data.success || !data.services.length) {
+      list.innerHTML = '<div style="padding:1.5rem 1.4rem;font-size:0.83rem;color:var(--t3)">No services yet. Add one below.</div>';
+      return;
+    }
+
+    list.innerHTML = data.services.map(svc => `
+      <div style="display:flex;align-items:center;gap:0.85rem;padding:0.85rem 1.4rem;border-bottom:1px solid var(--border);transition:background 0.2s ease" onmouseover="this.style.background='var(--bg2)'" onmouseout="this.style.background=''">
+        <div style="font-size:1.5rem;flex-shrink:0;width:32px;text-align:center">${svc.icon}</div>
+        <div style="flex:1;min-width:0">
+          <div style="font-size:0.86rem;font-weight:600;color:var(--t1);display:flex;align-items:center;gap:6px;flex-wrap:wrap">
+            ${svc.name}
+            <span style="font-size:0.62rem;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:0.06em;background:${svc.enabled?'rgba(45,74,62,0.1)':'rgba(192,57,43,0.08)'};color:${svc.enabled?'var(--green)':'#c0392b'}">${svc.enabled ? 'Active' : 'Disabled'}</span>
+            <span style="font-size:0.62rem;color:var(--t3);background:var(--bg2);padding:2px 7px;border-radius:99px;border:1px solid var(--border)">Order: ${svc.order}</span>
+          </div>
+          <div style="font-size:0.72rem;color:var(--t3);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis">${svc.href}</div>
+        </div>
+        <div style="display:flex;gap:5px;flex-shrink:0">
+          <!-- Toggle -->
+          <button onclick="svcToggle('${svc._id}')"
+            style="display:inline-flex;align-items:center;gap:4px;padding:0.35rem 0.75rem;border-radius:7px;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid ${svc.enabled?'rgba(192,57,43,0.2)':'rgba(45,74,62,0.2)'};background:transparent;color:${svc.enabled?'#c0392b':'var(--green)'};"
+            onmouseover="this.style.background=this.style.color==='#c0392b'?'rgba(192,57,43,0.08)':'rgba(45,74,62,0.08)'"
+            onmouseout="this.style.background='transparent'"
+            title="${svc.enabled?'Disable':'Enable'}">
+            ${svc.enabled
+              ? `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg> Disable`
+              : `<svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="20 6 9 17 4 12"/></svg> Enable`}
+          </button>
+          <!-- Edit -->
+          <button onclick="svcOpenModal('${svc._id}')"
+            style="display:inline-flex;align-items:center;gap:4px;padding:0.35rem 0.75rem;border-radius:7px;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid var(--border2);background:transparent;color:var(--t2);"
+            onmouseover="this.style.borderColor='var(--green)';this.style.color='var(--green)'"
+            onmouseout="this.style.borderColor='var(--border2)';this.style.color='var(--t2)'"
+            title="Edit">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg>
+            Edit
+          </button>
+          <!-- Delete -->
+          <button onclick="svcDelete('${svc._id}','${svc.name.replace(/'/g,"\\\'")}')"
+            style="display:inline-flex;align-items:center;gap:4px;padding:0.35rem 0.75rem;border-radius:7px;font-size:0.72rem;font-weight:600;cursor:pointer;border:1px solid rgba(192,57,43,0.2);background:transparent;color:#c0392b;"
+            onmouseover="this.style.background='rgba(192,57,43,0.08)'"
+            onmouseout="this.style.background='transparent'"
+            title="Delete">
+            <svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Delete
+          </button>
+        </div>
+      </div>`).join('');
+
+  } catch(e) {
+    list.innerHTML = '<div style="padding:1rem 1.4rem;font-size:0.8rem;color:#c0392b">Failed to load services. Check API.</div>';
+    console.error(e);
+  }
+}
+
+/* Open modal — add or edit */
+async function svcOpenModal(id) {
+  const modal = document.getElementById('svc-modal');
+  if (!modal) return;
+  modal.style.display = 'flex';
+
+  /* Reset all fields */
+  ['svc-name','svc-slug','svc-icon','svc-badge','svc-href','svc-desc','svc-features','svc-order']
+    .forEach(fid => { const el = document.getElementById(fid); if(el) el.value = ''; });
+  document.getElementById('svc-external').checked = false;
+  document.getElementById('svc-edit-id').value    = '';
+  document.getElementById('svc-modal-title').textContent = 'Add New Service';
+  document.getElementById('svc-theme').value = 'cyan';
+  svcCurrentTheme = 'cyan';
+
+  if (!id) return; /* Add mode — fields already blank */
+
+  /* Edit mode — fetch from API */
+  try {
+    const res  = await fetch('/api/admin/services');
+    const data = await res.json();
+    const svc  = data.services?.find(s => s._id === id);
+    if (!svc) return;
+
+    document.getElementById('svc-modal-title').textContent = 'Edit Service';
+    document.getElementById('svc-edit-id').value   = svc._id;
+    document.getElementById('svc-name').value      = svc.name      || '';
+    document.getElementById('svc-slug').value      = svc.slug      || '';
+    document.getElementById('svc-icon').value      = svc.icon      || '';
+    document.getElementById('svc-badge').value     = svc.badgeText || '';
+    document.getElementById('svc-href').value      = svc.href      || '';
+    document.getElementById('svc-desc').value      = svc.description || '';
+    document.getElementById('svc-features').value  = (svc.features || []).join('\n');
+    document.getElementById('svc-order').value     = svc.order     || 1;
+    document.getElementById('svc-external').checked = svc.external || false;
+
+    /* Detect theme */
+    const themeMap = {
+      'badge-cyan':'cyan','badge-amber':'amber',
+      'badge-emerald':'emerald','badge-blue':'blue','badge-purple':'purple'
+    };
+    const theme = themeMap[svc.badgeClass] || 'cyan';
+    document.getElementById('svc-theme').value = theme;
+    svcCurrentTheme = theme;
+
+  } catch(e) { console.error('Edit load error:', e); }
+}
+
+function svcCloseModal() {
+  const modal = document.getElementById('svc-modal');
+  if (modal) modal.style.display = 'none';
+}
+
+/* Save service (add or update) */
+async function svcSave() {
+  const id   = document.getElementById('svc-edit-id').value;
+  const name = document.getElementById('svc-name').value.trim();
+  const slug = document.getElementById('svc-slug').value.trim().toLowerCase().replace(/\s+/g,'-');
+  const href = document.getElementById('svc-href').value.trim();
+
+  if (!name || !slug || !href) {
+    sToast('Name, Slug and Link are required', true);
+    return;
+  }
+
+  const t        = SVC_THEMES[svcCurrentTheme] || SVC_THEMES.cyan;
+  const features = document.getElementById('svc-features').value
+    .split('\n').map(f => f.trim()).filter(Boolean).slice(0, 3);
+
+  const payload = {
+    name, slug,
+    icon:        document.getElementById('svc-icon').value.trim()  || '⬡',
+    badgeText:   document.getElementById('svc-badge').value.trim() || name,
+    href,
+    description: document.getElementById('svc-desc').value.trim(),
+    features,
+    order:       parseInt(document.getElementById('svc-order').value) || 99,
+    external:    document.getElementById('svc-external').checked,
+    badgeClass:  t.badge,
+    accentClass: t.accent,
+    iconClass:   t.icon,
+    linkClass:   t.link,
+    dotClass:    t.dot
+  };
+
+  const btn = document.getElementById('svc-save-btn');
+  if (btn) { btn.disabled = true; btn.textContent = 'Saving…'; }
+
+  try {
+    const url    = id ? `/api/admin/services/${id}` : '/api/admin/services';
+    const method = id ? 'PATCH' : 'POST';
+    const res    = await fetch(url, {
+      method,
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify(payload)
+    });
+    const d = await res.json();
+
+    if (d.success) {
+      sToast(id ? '✓ Service updated!' : '✓ Service added!');
+      svcCloseModal();
+      svcLoadList();
+    } else {
+      sToast(d.message || 'Failed to save', true);
+    }
+  } catch(e) {
+    sToast('Network error', true);
+  }
+
+  if (btn) { btn.disabled = false; btn.textContent = 'Save Service'; }
+}
+
+/* Toggle enable/disable */
+async function svcToggle(id) {
+  try {
+    const res = await fetch(`/api/admin/services/${id}/toggle`, { method: 'PATCH' });
+    const d   = await res.json();
+    if (d.success) {
+      sToast(`Service ${d.enabled ? 'enabled ✓' : 'disabled'}`);
+      svcLoadList();
+    } else {
+      sToast(d.message || 'Error', true);
+    }
+  } catch(e) { sToast('Network error', true); }
+}
+
+/* Delete service */
+async function svcDelete(id, name) {
+  if (!confirm(`Delete "${name}"? This cannot be undone.`)) return;
+  try {
+    const res = await fetch(`/api/admin/services/${id}`, { method: 'DELETE' });
+    const d   = await res.json();
+    if (d.success) {
+      sToast(`"${name}" deleted`);
+      svcLoadList();
+    } else {
+      sToast(d.message || 'Error', true);
+    }
+  } catch(e) { sToast('Network error', true); }
+}
+
+/* Close svc modal on backdrop click */
+document.addEventListener('click', function(e) {
+  const modal = document.getElementById('svc-modal');
+  if (modal && e.target === modal) svcCloseModal();
+});
+
+/* ── Patch goTo to load services when settings opens ── */
+(function(){
+  const _orig = goTo;
+  goTo = function(name) {
+    _orig(name);
+    if (name === 'settings') {
+      sLoadFromDB();
+      svcLoadList();
+    }
+  };
 })();
 </script>
 </body>

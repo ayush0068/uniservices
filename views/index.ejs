@@ -3,33 +3,29 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="UNI-SERVICES — A premium multi-service digital ecosystem. Explore UniCare+, UniShow, and UniSpace in one unified portal." />
-  <title>UNI-SERVICES | Your Digital Ecosystem</title>
+  <meta name="description" content="<%= settings.metaDesc %>" />
+  <% if (!settings.searchIndex) { %><meta name="robots" content="noindex,nofollow" /><% } %>
+  <title><%= settings.siteName %> | Your Digital Ecosystem</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬡</text></svg>" />
 </head>
 <body>
 
-  <!-- ===================== PAGE LOADER ===================== -->
   <div id="page-loader">
     <div class="loader-inner">
-      <div class="loader-logo">Uni-Services</div>
+      <div class="loader-logo"><%= settings.siteName %></div>
       <div class="loader-bar"><div class="loader-bar-fill"></div></div>
     </div>
   </div>
 
-  <!-- ===================== BG ORBS ======================== -->
   <div class="bg-orbs" aria-hidden="true">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
   </div>
 
-  <!-- ===================== NAVBAR ========================= -->
-  <!--  navbar.ejs   -->
-    <%- include('navbar') %>
+  <%- include('navbar') %>
 
-  <!-- Mobile nav -->
   <div class="nav-mobile" id="navMobile">
     <a href="/">Home</a>
     <a href="/about">About</a>
@@ -37,27 +33,23 @@
   </div>
 
   <main>
-    <!-- ==================== HERO ========================== -->
+
+    <!-- HERO -->
     <section class="hero section" id="home">
       <div class="container">
         <div class="hero-grid">
-
-          <!-- Left: Content -->
           <div class="hero-content">
             <div class="hero-eyebrow reveal">
               <span class="eyebrow-dot"></span>
               Introducing the Digital Ecosystem
             </div>
-
             <h1 class="hero-title reveal reveal-delay-1">
               One Portal.<br />
               <span class="gradient-text">Infinite Possibilities.</span>
             </h1>
-
             <p class="hero-subtitle reveal reveal-delay-2">
-              UNI-SERVICES brings together healthcare, entertainment, and cloud storage under one intelligent, beautifully designed platform — built for the way you live.
+              <%= settings.siteName %> brings together healthcare, entertainment, and cloud storage under one intelligent, beautifully designed platform — built for the way you live.
             </p>
-
             <div class="hero-actions reveal reveal-delay-3">
               <a href="#services" class="btn btn-primary">
                 Explore Services
@@ -65,10 +57,9 @@
               </a>
               <a href="/about" class="btn btn-ghost">Learn More</a>
             </div>
-
             <div class="hero-stats reveal reveal-delay-4">
               <div class="stat-item">
-                <div class="stat-number">3</div>
+                <div class="stat-number"><%= services.length %></div>
                 <div class="stat-label">Core Services</div>
               </div>
               <div class="stat-item">
@@ -82,169 +73,76 @@
             </div>
           </div>
 
-          <!-- Right: Visual -->
+          <!-- Hero Visual -->
           <div class="hero-visual reveal reveal-delay-2" aria-hidden="true">
             <div class="hero-visual-inner">
               <div class="hero-center-orb">
                 <div class="hub-icon">⬡</div>
               </div>
-
-              <!-- Floating mini cards -->
+              <% services.forEach((svc, i) => { %>
               <div class="hero-float-card">
-                <div class="float-icon icon-cyan">🩺</div>
+                <div class="float-icon <%= svc.iconClass %>"><%= svc.icon %></div>
                 <div class="float-card-text">
-                  <div class="float-card-name">UniCare+</div>
-                  <div class="float-card-sub">Doctor online now</div>
+                  <div class="float-card-name"><%= svc.name %></div>
+                  <div class="float-card-sub"><%= svc.tagline %></div>
                 </div>
               </div>
-
-              <div class="hero-float-card">
-                <div class="float-icon icon-amber">🎬</div>
-                <div class="float-card-text">
-                  <div class="float-card-name">UniShow</div>
-                  <div class="float-card-sub">4 seats available</div>
-                </div>
-              </div>
-
-              
-
-              <div class="hero-float-card">
-                <div class="float-icon icon-emerald">☁️</div>
-                <div class="float-card-text">
-                  <div class="float-card-name">UniSpace</div>
-                  <div class="float-card-sub">12 GB synced</div>
-                </div>
-              </div>
+              <% }) %>
             </div>
           </div>
-          
 
-        </div><!-- /hero-grid -->
+        </div>
       </div>
-    </section><!-- /hero -->
+    </section>
 
-    <!-- ==================== SERVICES ====================== -->
+    <!-- SERVICES -->
     <section class="services-section section" id="services">
       <div class="container">
         <div class="services-header">
           <div>
             <div class="section-tag reveal">Our Services</div>
-            <h2 class="section-title reveal reveal-delay-1">Three Pillars of<br />Modern Digital Life</h2>
+            <h2 class="section-title reveal reveal-delay-1">
+              <%= services.length === 3 ? 'Three Pillars of' : services.length + ' Pillars of' %><br />Modern Digital Life
+            </h2>
           </div>
           <p class="section-subtitle reveal reveal-delay-2" style="text-align:right;">
-            Each service is independently powerful, yet seamlessly integrated within the UNI-SERVICES ecosystem.
+            Each service is independently powerful, yet seamlessly integrated within the <%= settings.siteName %> ecosystem.
           </p>
         </div>
 
         <div class="services-grid">
-
-          <!-- UniCare+ -->
-          <article class="service-card card-unicare reveal" tabindex="0">
+          <% services.forEach((svc, i) => { %>
+          <article class="service-card <%= svc.accentClass %> reveal <%= i > 0 ? 'reveal-delay-' + i : '' %>" tabindex="0">
             <div class="card-content">
-              <div class="card-icon-wrap icon-cyan">🩺</div>
-              <div class="card-badge badge-cyan">Health &amp; Wellness</div>
-              <h3 class="card-name">UniCare+</h3>
-              <p class="card-desc">
-                Connect with certified doctors, specialists, and mental health professionals from anywhere — anytime. Instant consultations, prescriptions, and health records in one secure place.
-              </p>
+              <div class="card-icon-wrap <%= svc.iconClass %>"><%= svc.icon %></div>
+              <div class="card-badge <%= svc.badgeClass %>"><%= svc.badgeText %></div>
+              <h3 class="card-name"><%= svc.name %></h3>
+              <p class="card-desc"><%= svc.description %></p>
             </div>
-
             <div class="card-features">
+              <% svc.features.forEach(f => { %>
               <div class="card-feature-item">
-                <span class="feature-dot dot-cyan"></span>
-                Instant video consultations
+                <span class="feature-dot <%= svc.dotClass %>"></span>
+                <%= f %>
               </div>
-              <div class="card-feature-item">
-                <span class="feature-dot dot-cyan"></span>
-                500+ verified specialists
-              </div>
-              <div class="card-feature-item">
-                <span class="feature-dot dot-cyan"></span>
-                Digital prescriptions & reports
-              </div>
+              <% }) %>
             </div>
-
             <div class="card-footer">
-              <a href="/coming-soon" rel="noopener" class="card-link link-cyan">
+              <a href="<%= svc.href %>"
+                 <%= svc.external ? 'target="_blank" rel="noopener"' : '' %>
+                 class="card-link <%= svc.linkClass %>">
                 Explore
                 <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
               </a>
             </div>
           </article>
+          <% }) %>
+        </div>
 
-          <!-- UniShow -->
-          <article class="service-card card-unishow reveal reveal-delay-1" tabindex="0">
-            <div class="card-content">
-              <div class="card-icon-wrap icon-amber">🎬</div>
-              <div class="card-badge badge-amber">Entertainment</div>
-              <h3 class="card-name">UniShow</h3>
-              <p class="card-desc">
-                Book movie and event tickets effortlessly. Browse showtimes, choose your seats with a live seat map, and get instant e-tickets — no queues, no hassle.
-              </p>
-            </div>
-
-            <div class="card-features">
-              <div class="card-feature-item">
-                <span class="feature-dot dot-amber"></span>
-                Live seat selection
-              </div>
-              <div class="card-feature-item">
-                <span class="feature-dot dot-amber"></span>
-                1000+ cinemas & theatres
-              </div>
-              <div class="card-feature-item">
-                <span class="feature-dot dot-amber"></span>
-                Instant e-ticket delivery
-              </div>
-            </div>
-
-            <div class="card-footer">
-              <a href="/unishow" rel="noopener" class="card-link link-amber">
-                Explore
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-          <!-- UniSpace -->
-          <article class="service-card card-unispace reveal reveal-delay-2" tabindex="0">
-            <div class="card-content">
-              <div class="card-icon-wrap icon-emerald">☁️</div>
-              <div class="card-badge badge-emerald">Cloud Storage</div>
-              <h3 class="card-name">UniSpace</h3>
-              <p class="card-desc">
-                Enterprise-grade secure cloud storage for individuals and teams. Zero-knowledge encryption, real-time sync, and smart file management — your data, only yours.
-              </p>
-            </div>
-
-            <div class="card-features">
-              <div class="card-feature-item">
-                <span class="feature-dot dot-emerald"></span>
-                End-to-end encryption
-              </div>
-              <div class="card-feature-item">
-                <span class="feature-dot dot-emerald"></span>
-                Real-time multi-device sync
-              </div>
-              <div class="card-feature-item">
-                <span class="feature-dot dot-emerald"></span>
-                Up to 2 TB storage
-              </div>
-            </div>
-
-            <div class="card-footer">
-              <a href="https://unispace-z8bd.onrender.com/" rel="noopener" class="card-link link-emerald">
-                Explore
-                <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
-              </a>
-            </div>
-          </article>
-
-        </div><!-- /services-grid -->
       </div>
-    </section><!-- /services -->
+    </section>
 
-    <!-- ==================== WHY CHOOSE US ================= -->
+    <!-- WHY CHOOSE US -->
     <section class="why-section section">
       <div class="container">
         <div class="section-header">
@@ -254,7 +152,6 @@
             We didn't just build three apps — we engineered a unified platform designed around your real daily needs.
           </p>
         </div>
-
         <div class="why-grid">
           <div class="why-card reveal">
             <div class="why-icon">🔒</div>
@@ -278,18 +175,16 @@
           </div>
         </div>
       </div>
-    </section><!-- /why -->
+    </section>
 
-    <!-- ==================== CTA =========================== -->
+    <!-- CTA -->
     <section class="cta-section section">
       <div class="container">
         <div class="cta-box reveal">
           <div class="section-tag">Start Today</div>
-          <h2 class="section-title">
-            Ready to Experience<br />the Full Ecosystem?
-          </h2>
+          <h2 class="section-title">Ready to Experience<br />the Full Ecosystem?</h2>
           <p class="section-subtitle">
-            Join thousands of users already living smarter with UNI-SERVICES. Free to start. No credit card required.
+            Join thousands of users already living smarter with <%= settings.siteName %>. Free to start. No credit card required.
           </p>
           <div class="cta-actions">
             <a href="/contact" class="btn btn-primary">
@@ -304,10 +199,7 @@
 
   </main>
 
-  <!-- ===================== FOOTER ========================= -->
-   <!-- inclue footer.ejs -->
   <%- include('footer') %>
-
   <script src="script.js"></script>
 </body>
 </html>
