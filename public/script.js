@@ -299,3 +299,41 @@ document.addEventListener('DOMContentLoaded', function () {
     }
   });
 });
+
+
+/* ── Cookie / Terms Consent Banner ── */
+(function () {
+  if (localStorage.getItem('uni-consent') === 'accepted') return;
+
+  const banner = document.createElement('div');
+  banner.id = 'consent-banner';
+  banner.innerHTML = `
+    <div class="consent-inner">
+      <div class="consent-text">
+        <strong>We value your privacy</strong>
+        <p>By using UNI-SERVICES, you agree to our
+          <a href="/privacy">Privacy Policy</a> and
+          <a href="/terms">Terms of Service</a>.
+          We use cookies to enhance your experience.
+        </p>
+      </div>
+      <div class="consent-actions">
+        <button id="consent-decline" class="consent-btn consent-btn--ghost">Decline</button>
+        <button id="consent-accept"  class="consent-btn consent-btn--primary">Accept & Continue</button>
+      </div>
+    </div>`;
+  document.body.appendChild(banner);
+
+  /* Animate in */
+  requestAnimationFrame(() => banner.classList.add('consent-visible'));
+
+  function dismiss(accepted) {
+    if (accepted) localStorage.setItem('uni-consent', 'accepted');
+    else          localStorage.setItem('uni-consent', 'declined');
+    banner.classList.remove('consent-visible');
+    setTimeout(() => banner.remove(), 400);
+  }
+
+  document.getElementById('consent-accept') .addEventListener('click', () => dismiss(true));
+  document.getElementById('consent-decline').addEventListener('click', () => dismiss(false));
+})();
