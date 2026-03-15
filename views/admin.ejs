@@ -622,20 +622,388 @@ select.filter-select option{background:var(--card)}
           <div style="font-size:0.85rem;color:var(--t3)">UniSpace admin panel — backend integration pending.</div>
         </div>
       </div>
+
+      <!-- Settings SEction -->
       <div class="page" id="page-settings">
-        <div class="section-tag" style="margin-bottom:1rem">System</div>
-        <h2 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:1.5rem">Settings</h2>
-        <div class="card" style="padding:2rem">
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 0;border-bottom:1px solid var(--border)">
-            <div><div style="font-size:0.88rem;font-weight:600;color:var(--t1)">Dark Mode</div><div style="font-size:0.76rem;color:var(--t3)">Toggle light / dark theme</div></div>
-            <label class="theme-toggle" aria-label="Toggle dark mode"><input type="checkbox" id="themeCheckbox2" tabindex="-1"><div class="toggle-track"><span class="toggle-icon--sun"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg></span><span class="toggle-icon--moon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></div><div class="toggle-thumb"></div></label>
-          </div>
-          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 0">
-            <div><div style="font-size:0.88rem;font-weight:600;color:var(--t1)">Admin Email</div><div style="font-size:0.76rem;color:var(--t3)">uniservices013@gmail.com</div></div>
-            <span class="badge badge-green">Active</span>
+
+  <!-- Settings styles — sirf is page ke liye -->
+  <style>
+    .settings-section{background:var(--bg-card);border:1px solid var(--border);border-radius:var(--radius-lg);box-shadow:var(--shadow-xs);margin-bottom:1.1rem;overflow:hidden;transition:background var(--transition-medium)}
+    .sec-head{display:flex;align-items:center;gap:12px;padding:1rem 1.4rem;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);transition:background var(--transition-fast)}
+    .sec-head:hover{background:var(--bg-secondary)}
+    .sec-head-icon{width:34px;height:34px;border-radius:9px;display:flex;align-items:center;justify-content:center;font-size:0.95rem;flex-shrink:0}
+    .sec-head-text{flex:1}
+    .sec-head-text h3{font-size:0.9rem;font-weight:600;color:var(--text-primary)}
+    .sec-head-text p{font-size:0.72rem;color:var(--text-muted);margin-top:1px}
+    .sec-chev{color:var(--text-muted);transition:transform var(--transition-medium);flex-shrink:0}
+    .sec-head.s-open .sec-chev{transform:rotate(180deg)}
+    .sec-body{display:none;padding:0.25rem 0}
+    .sec-body.s-open{display:block}
+    .s-row{display:flex;align-items:center;gap:1rem;padding:0.85rem 1.4rem;border-bottom:1px solid var(--border);transition:background var(--transition-fast)}
+    .s-row:last-child{border-bottom:none}
+    .s-row:hover{background:var(--bg-secondary)}
+    .s-row--full{flex-direction:column;align-items:flex-start;gap:0.65rem}
+    .s-row--full .s-ctrl{width:100%}
+    .s-info{flex:1;min-width:0}
+    .s-lbl{font-size:0.84rem;font-weight:600;color:var(--text-primary);margin-bottom:2px;display:flex;align-items:center;gap:8px}
+    .s-desc{font-size:0.73rem;color:var(--text-muted);line-height:1.4}
+    .s-ctrl{flex-shrink:0;display:flex;align-items:center;gap:8px}
+    /* Switch */
+    .ssw{position:relative;width:44px;height:26px;cursor:pointer;flex-shrink:0}
+    .ssw input{opacity:0;width:0;height:0;position:absolute}
+    .ssw-track{position:absolute;inset:0;border-radius:26px;background:#d1d1d6;transition:background 0.3s ease}
+    .ssw input:checked~.ssw-track{background:var(--accent-primary)}
+    .ssw-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)}
+    .ssw input:checked~.ssw-thumb{transform:translateX(18px)}
+    .ssw:active .ssw-thumb{width:24px}
+    .ssw input:checked:active~.ssw-thumb{transform:translateX(14px);width:24px}
+    /* Select */
+    .s-sel{height:32px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;padding:0 1.8rem 0 0.7rem;font-family:var(--font-body);font-size:0.8rem;color:var(--text-primary);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 7px center;cursor:pointer;transition:border-color var(--transition-fast)}
+    .s-sel:focus{border-color:var(--accent-primary);outline:none;box-shadow:0 0 0 3px rgba(45,74,62,0.1)}
+    .s-sel option{background:var(--bg-card)}
+    /* Input */
+    .s-inp{height:32px;background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;padding:0 0.7rem;font-family:var(--font-body);font-size:0.8rem;color:var(--text-primary);outline:none;transition:border-color var(--transition-fast),box-shadow var(--transition-fast);width:180px}
+    .s-inp:focus{border-color:var(--accent-primary);box-shadow:0 0 0 3px rgba(45,74,62,0.1)}
+    .s-inp::placeholder{color:var(--text-muted)}
+    /* Textarea */
+    .s-ta{background:var(--bg-secondary);border:1px solid var(--border);border-radius:8px;padding:0.55rem 0.7rem;font-family:var(--font-body);font-size:0.8rem;color:var(--text-primary);outline:none;resize:vertical;width:100%;transition:border-color var(--transition-fast),box-shadow var(--transition-fast);line-height:1.55}
+    .s-ta:focus{border-color:var(--accent-primary);box-shadow:0 0 0 3px rgba(45,74,62,0.1)}
+    /* Btn */
+    .s-btn{display:inline-flex;align-items:center;gap:5px;padding:0.4rem 0.9rem;border-radius:7px;font-family:var(--font-body);font-size:0.76rem;font-weight:600;cursor:pointer;transition:all var(--transition-fast);border:1px solid var(--border-hover);background:transparent;color:var(--text-secondary)}
+    .s-btn:hover{border-color:var(--accent-primary);color:var(--accent-primary);background:rgba(45,74,62,0.06)}
+    .s-btn--red{border-color:rgba(192,57,43,0.2);color:#c0392b}
+    .s-btn--red:hover{background:rgba(192,57,43,0.08);border-color:#c0392b}
+    /* Badge */
+    .s-bdg{font-size:0.62rem;font-weight:700;padding:2px 7px;border-radius:99px;letter-spacing:0.06em}
+    .s-bdg--green{background:var(--green-lt,rgba(45,74,62,0.08));color:var(--accent-primary)}
+    .s-bdg--gold{background:var(--gold-lt,rgba(201,147,58,0.1));color:var(--accent-gold,#c9933a)}
+    .s-bdg--red{background:rgba(192,57,43,0.08);color:#c0392b}
+    /* Color swatches */
+    .clr-sw{width:26px;height:26px;border-radius:6px;border:2px solid var(--border-hover);cursor:pointer;transition:transform 0.15s ease;flex-shrink:0}
+    .clr-sw:hover{transform:scale(1.12)}
+    .clr-sw.active{border-color:var(--accent-primary);box-shadow:0 0 0 2px var(--accent-primary)}
+    /* Status dot */
+    .sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0}
+    .sdot--green{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,0.18)}
+    .sdot--gold{background:var(--accent-gold,#c9933a)}
+    /* Danger section */
+    .settings-section.danger .sec-head{background:rgba(192,57,43,0.05)}
+    .settings-section.danger .sec-head:hover{background:rgba(192,57,43,0.1)}
+    .settings-section.danger .sec-head-text h3{color:#c0392b}
+    .settings-section.danger{border-color:rgba(192,57,43,0.2)}
+    /* Range */
+    .s-range{width:120px;accent-color:var(--accent-primary)}
+    /* Pill */
+    .s-pill{display:inline-flex;align-items:center;gap:5px;padding:3px 10px;border-radius:99px;font-size:0.72rem;font-weight:500;border:1px solid var(--border);color:var(--text-secondary);background:var(--bg-secondary)}
+    /* Save bar */
+    .s-savebar{position:sticky;bottom:0;background:var(--bg-card);border:1px solid var(--border-hover);border-radius:var(--radius-lg);padding:0.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-md);margin-top:1.25rem;flex-wrap:wrap;gap:0.6rem;backdrop-filter:blur(12px);z-index:10}
+    .s-savebar-text{font-size:0.78rem;color:var(--text-muted)}
+    /* Toast */
+    #s-toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--accent-primary);color:var(--text-inverse);padding:0.65rem 1.1rem;border-radius:10px;font-size:0.8rem;font-weight:500;box-shadow:var(--shadow-md);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.3s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;gap:7px;pointer-events:none}
+    #s-toast.s-show{transform:translateY(0);opacity:1}
+    #s-toast.s-err{background:#c0392b}
+  </style>
+
+  <div id="s-toast"></div>
+
+  <div class="section-hdr" style="margin-bottom:1.5rem">
+    <div>
+      <div class="section-tag">Control Panel</div>
+      <h2 style="font-family:var(--serif);font-size:1.4rem;margin-top:4px">Settings</h2>
+    </div>
+    <button class="btn btn-primary btn-sm" onclick="sSettingsSaveAll()">
+      <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+      Save All
+    </button>
+  </div>
+
+  <!-- 1. Appearance -->
+  <div class="settings-section">
+    <div class="sec-head s-open" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:var(--blue-lt,rgba(59,111,212,0.1))">🎨</div>
+      <div class="sec-head-text"><h3>Appearance</h3><p>Theme, colors, fonts and visual style</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body s-open">
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Default Theme</div><div class="s-desc">Theme shown to all visitors by default</div></div>
+        <div class="s-ctrl">
+          <select class="s-sel" id="ss-theme" onchange="sSave('siteTheme',this.value)">
+            <option value="light">Light</option><option value="dark">Dark</option><option value="system">Follow System</option>
+          </select>
+        </div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Accent Color</div><div class="s-desc">Primary brand color across the site</div></div>
+        <div class="s-ctrl">
+          <div style="display:flex;align-items:center;gap:6px" id="ss-accents">
+            <div class="clr-sw active" style="background:#2d4a3e" data-c="#2d4a3e" onclick="sPickColor(this)" title="Forest Green"></div>
+            <div class="clr-sw" style="background:#1e3a5f" data-c="#1e3a5f" onclick="sPickColor(this)" title="Navy Blue"></div>
+            <div class="clr-sw" style="background:#5b2333" data-c="#5b2333" onclick="sPickColor(this)" title="Burgundy"></div>
+            <div class="clr-sw" style="background:#4a3728" data-c="#4a3728" onclick="sPickColor(this)" title="Brown"></div>
+            <div class="clr-sw" style="background:#2d3a4a" data-c="#2d3a4a" onclick="sPickColor(this)" title="Slate"></div>
+            <input type="color" value="#2d4a3e" style="width:26px;height:26px;border-radius:6px;border:2px solid var(--border-hover);cursor:pointer;padding:1px" onchange="sSave('accentColor',this.value);sToast('Custom color saved')" title="Custom"/>
           </div>
         </div>
       </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Border Radius</div><div class="s-desc">Roundness of cards and buttons</div></div>
+        <div class="s-ctrl" style="gap:10px">
+          <input type="range" class="s-range" min="0" max="32" value="12" step="4" oninput="document.getElementById('ss-radval').textContent=this.value+'px';sSave('borderRadius',this.value)"/>
+          <span id="ss-radval" style="font-size:0.76rem;color:var(--text-secondary);min-width:30px">12px</span>
+        </div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Page Animations</div><div class="s-desc">Scroll reveal and entrance effects</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('animations',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Background Orbs</div><div class="s-desc">Floating ambient shapes in background</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('bgOrbs',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 2. Site Identity -->
+  <div class="settings-section">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:var(--green-lt,rgba(45,74,62,0.08))">🏷️</div>
+      <div class="sec-head-text"><h3>Site Identity</h3><p>Name, tagline and branding text</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Site Name</div><div class="s-desc">Shown in navbar and browser tab</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="text" value="UNI-SERVICES" onchange="sSave('siteName',this.value)"/></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Hero Tagline</div><div class="s-desc">Main headline on home page</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="text" value="Your Digital Ecosystem" style="width:210px" onchange="sSave('tagline',this.value)"/></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Footer Tagline</div><div class="s-desc">Short text below logo in footer</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="text" value="One Portal. Infinite Possibilities." style="width:230px" onchange="sSave('footerTagline',this.value)"/></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Copyright Year</div><div class="s-desc">Shown in footer</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="number" value="2025" min="2020" max="2099" style="width:85px" onchange="sSave('copyrightYear',this.value)"/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 3. Contact Info -->
+  <div class="settings-section">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:var(--gold-lt,rgba(201,147,58,0.1))">📬</div>
+      <div class="sec-head-text"><h3>Contact Information</h3><p>Email, phone and address on contact page</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Public Email</div><div class="s-desc">Shown on contact page and footer</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="email" value="uniservices013@gmail.com" style="width:225px" onchange="sSave('publicEmail',this.value)"/></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Phone Number</div><div class="s-desc">Shown on contact page</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="tel" value="+91 8931878476" style="width:170px" onchange="sSave('publicPhone',this.value)"/></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Address</div><div class="s-desc">Headquarters location</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="text" value="Prayagraj, Uttar Pradesh, India" style="width:250px" onchange="sSave('address',this.value)"/></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Support Hours</div><div class="s-desc">Displayed on contact page</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="text" value="24 / 7 · 365 days a year" style="width:195px" onchange="sSave('supportHours',this.value)"/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 4. Services -->
+  <div class="settings-section">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:rgba(192,115,90,0.1)">⚙️</div>
+      <div class="sec-head-text"><h3>Services Control</h3><p>Enable or disable individual services</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">🩺 UniCare+ <span class="s-bdg s-bdg--green">Live</span></div><div class="s-desc">Online healthcare consultation</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('svc_unicare',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">🎬 UniShow <span class="s-bdg s-bdg--green">Live</span></div><div class="s-desc">Movie and event ticket booking</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('svc_unishow',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">☁️ UniSpace <span class="s-bdg s-bdg--green">Live</span></div><div class="s-desc">Encrypted cloud storage</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('svc_unispace',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Maintenance Mode</div><div class="s-desc">Redirect all visitors to Coming Soon page</div></div>
+        <div class="s-ctrl" style="gap:8px">
+          <span class="s-bdg s-bdg--gold" id="ss-maintbadge" style="display:none">Active</span>
+          <label class="ssw"><input type="checkbox" id="ss-maint" onchange="sToggleMaint(this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label>
+        </div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Contact Form</div><div class="s-desc">Allow visitors to submit contact form</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('contactForm',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Consent Banner</div><div class="s-desc">Show cookie/privacy consent to new visitors</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('consentBanner',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 5. Notifications -->
+  <div class="settings-section">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:rgba(59,111,212,0.1)">🔔</div>
+      <div class="sec-head-text"><h3>Notifications</h3><p>Email alerts and admin notifications</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">New Contact Alert</div><div class="s-desc">Email me when someone submits the form</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('notifContact',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Notification Email</div><div class="s-desc">Where admin alerts are sent</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="email" value="uniservices013@gmail.com" style="width:225px" onchange="sSave('notifEmail',this.value)"/></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Daily Summary</div><div class="s-desc">Daily digest of all new messages</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" onchange="sSave('dailySummary',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 6. SEO -->
+  <div class="settings-section">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:var(--green-lt,rgba(45,74,62,0.08))">🔍</div>
+      <div class="sec-head-text"><h3>SEO &amp; Meta</h3><p>Search engine and social media settings</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row s-row--full">
+        <div class="s-info"><div class="s-lbl">Meta Description</div><div class="s-desc">Shown in Google search results (max 160 chars)</div></div>
+        <div class="s-ctrl">
+          <textarea class="s-ta" rows="2" maxlength="160" id="ss-meta" oninput="document.getElementById('ss-metacount').textContent=this.value.length+' / 160'" onchange="sSave('metaDesc',this.value)">UNI-SERVICES — A premium multi-service digital ecosystem. Explore UniCare+, UniShow, and UniSpace in one unified portal.</textarea>
+          <div style="font-size:0.68rem;color:var(--text-muted);margin-top:3px;text-align:right" id="ss-metacount">119 / 160</div>
+        </div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Search Indexing</div><div class="s-desc">Allow Google to index the site</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('searchIndex',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">OG Image URL</div><div class="s-desc">Image for social media sharing</div></div>
+        <div class="s-ctrl"><input class="s-inp" type="url" placeholder="https://…/og.png" style="width:220px" onchange="sSave('ogImage',this.value)"/></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 7. Security -->
+  <div class="settings-section">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:rgba(192,115,90,0.1)">🔐</div>
+      <div class="sec-head-text"><h3>Security</h3><p>Admin session and access control</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Session Duration</div><div class="s-desc">Auto-logout after inactivity</div></div>
+        <div class="s-ctrl">
+          <select class="s-sel" onchange="sSave('sessionDuration',this.value)">
+            <option value="2">2 hours</option><option value="8" selected>8 hours</option><option value="24">24 hours</option><option value="168">7 days</option>
+          </select>
+        </div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Admin Status</div><div class="s-desc">Current session</div></div>
+        <div class="s-ctrl" style="gap:8px"><div class="sdot sdot--green"></div><span style="font-size:0.78rem;color:var(--text-secondary)">Active</span></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Rate Limiting</div><div class="s-desc">Limit form submissions (anti-spam)</div></div>
+        <div class="s-ctrl"><label class="ssw"><input type="checkbox" checked onchange="sSave('rateLimiting',this.checked)"><div class="ssw-track"></div><div class="ssw-thumb"></div></label></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Credentials</div><div class="s-desc">Change via .env file</div></div>
+        <div class="s-ctrl"><code style="font-size:0.72rem;color:var(--text-muted);background:var(--bg-secondary);padding:3px 9px;border-radius:6px;border:1px solid var(--border)">ADMIN_PASSWORD=***</code></div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Logout</div><div class="s-desc">End current admin session</div></div>
+        <div class="s-ctrl">
+          <a href="/admin/logout" class="s-btn s-btn--red">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout Now
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 8. System Info -->
+  <div class="settings-section">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:var(--bg-secondary)">💻</div>
+      <div class="sec-head-text"><h3>System Info</h3><p>Platform and technical details</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row"><div class="s-info"><div class="s-lbl">Platform</div></div><div class="s-ctrl"><span class="s-pill">Node.js + Express</span></div></div>
+      <div class="s-row"><div class="s-info"><div class="s-lbl">Database</div></div><div class="s-ctrl" style="gap:7px"><div class="sdot sdot--green"></div><span class="s-pill">MongoDB</span></div></div>
+      <div class="s-row"><div class="s-info"><div class="s-lbl">View Engine</div></div><div class="s-ctrl"><span class="s-pill">EJS</span></div></div>
+      <div class="s-row"><div class="s-info"><div class="s-lbl">Email Service</div></div><div class="s-ctrl" style="gap:7px"><div class="sdot sdot--green"></div><span class="s-pill">Nodemailer + Gmail</span></div></div>
+      <div class="s-row"><div class="s-info"><div class="s-lbl">Hosting</div></div><div class="s-ctrl"><span class="s-pill">Render.com</span></div></div>
+      <div class="s-row"><div class="s-info"><div class="s-lbl">Last Saved</div></div><div class="s-ctrl"><span style="font-size:0.76rem;color:var(--text-muted)" id="ss-lastsaved">Never</span></div></div>
+    </div>
+  </div>
+
+  <!-- 9. Danger Zone -->
+  <div class="settings-section danger">
+    <div class="sec-head" onclick="sToggle(this)">
+      <div class="sec-head-icon" style="background:rgba(192,57,43,0.08)">⚠️</div>
+      <div class="sec-head-text"><h3>Danger Zone</h3><p>Irreversible actions — proceed with caution</p></div>
+      <svg class="sec-chev" width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="sec-body">
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Clear All Contacts</div><div class="s-desc">Permanently delete all contact submissions from database</div></div>
+        <div class="s-ctrl">
+          <button class="s-btn s-btn--red" onclick="sDanger('clearContacts')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/></svg>
+            Clear All
+          </button>
+        </div>
+      </div>
+      <div class="s-row">
+        <div class="s-info"><div class="s-lbl">Reset All Settings</div><div class="s-desc">Restore everything to default values</div></div>
+        <div class="s-ctrl">
+          <button class="s-btn s-btn--red" onclick="sDanger('resetSettings')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Reset
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Save bar -->
+  <div class="s-savebar">
+    <div class="s-savebar-text">Changes saved to localStorage — connect backend API to persist across devices</div>
+    <div style="display:flex;gap:0.6rem">
+      <button class="btn btn-ghost btn-sm" onclick="sLoadSettings()">↺ Revert</button>
+      <button class="btn btn-primary btn-sm" onclick="sSettingsSaveAll()">
+        <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save All
+      </button>
+    </div>
+  </div>
+
+</div>
 
     </div><!-- /content -->
   </div><!-- /main -->
@@ -995,6 +1363,77 @@ function timeAgo(d){
   await fetchContacts();
   await fetchStats();
   renderDashboard();
+})();
+
+const S_KEY = 'uni-admin-settings';
+function sGet(){return JSON.parse(localStorage.getItem(S_KEY)||'{}')}
+function sSet(s){localStorage.setItem(S_KEY,JSON.stringify(s))}
+function sSave(k,v){const s=sGet();s[k]=v;sSet(s);document.getElementById('ss-lastsaved').textContent='Just now'}
+
+function sToast(msg,err=false){
+  const t=document.getElementById('s-toast');
+  t.className='s-show'+(err?' s-err':'');
+  t.innerHTML=`<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${err?'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>':'<polyline points="20 6 9 17 4 12"/>'}</svg>${msg}`;
+  clearTimeout(t._t);t._t=setTimeout(()=>t.classList.remove('s-show'),2800);
+}
+
+function sToggle(head){
+  head.classList.toggle('s-open');
+  head.nextElementSibling.classList.toggle('s-open');
+}
+
+function sPickColor(el){
+  document.querySelectorAll('#ss-accents .clr-sw').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  sSave('accentColor',el.dataset.c);
+  sToast('Accent color saved — update CSS variable to apply');
+}
+
+function sToggleMaint(on){
+  document.getElementById('ss-maintbadge').style.display=on?'inline-flex':'none';
+  sSave('maintenance',on);
+  sToast(on?'⚠ Maintenance mode ON':'Maintenance mode OFF');
+}
+
+function sSettingsSaveAll(){
+  const s=sGet();
+  s.savedAt=new Date().toLocaleTimeString('en-IN');
+  sSet(s);
+  document.getElementById('ss-lastsaved').textContent=s.savedAt;
+  sToast('All settings saved!');
+}
+
+function sLoadSettings(){
+  if(!confirm('Revert all settings to defaults?'))return;
+  localStorage.removeItem(S_KEY);
+  sToast('Settings reverted');
+  setTimeout(()=>{
+    const pg=document.getElementById('page-settings');
+    if(pg){pg.classList.remove('active');setTimeout(()=>pg.classList.add('active'),50)}
+  },600);
+}
+
+function sDanger(action){
+  const msgs={clearContacts:'delete ALL contact messages? This CANNOT be undone.',resetSettings:'reset all settings to defaults?'};
+  if(!confirm('Are you sure you want to '+msgs[action]))return;
+  if(action==='resetSettings'){sLoadSettings();return}
+  if(action==='clearContacts'){
+    fetch('/api/admin/contacts/clear-all',{method:'DELETE'})
+      .then(r=>r.json())
+      .then(d=>{
+        if(d.success){contacts=[];renderTable([]);fetchStats();sToast('All contacts deleted')}
+        else sToast(d.message||'Error',true);
+      })
+      .catch(()=>sToast('Add route in app.js first',true));
+  }
+}
+
+/* Load saved values */
+(function(){
+  const s=sGet();
+  if(s.savedAt)document.getElementById('ss-lastsaved').textContent=s.savedAt;
+  if(s.siteName){const el=document.querySelector('#page-settings input[onchange*="siteName"]');if(el)el.value=s.siteName}
+  if(s.maintenance){const el=document.getElementById('ss-maint');if(el){el.checked=true;sToggleMaint(true)}}
 })();
 </script>
 </body>

@@ -85,6 +85,7 @@ app.get('/coming-soon', (req, res) => res.render('coming-soon', { title: 'UniSer
 
 app.get('/privacy', (req, res) => res.render('privacy', { title: 'Privacy Policy' }));
 app.get('/terms', (req, res) => res.render('terms', { title: 'Terms of Service' }));
+app.get('/admin-settings', (req, res) => res.render('admin-settings', { title: 'Admin Settings' }));
 
 /* ── POST Contact Form ── */
 

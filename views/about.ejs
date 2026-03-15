@@ -7,10 +7,505 @@
   <title>About Us | UNI-SERVICES</title>
   <link rel="stylesheet" href="style.css" />
   <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 100 100'><text y='.9em' font-size='90'>⬡</text></svg>" />
+
+  <style>
+    /* ── About page specific styles ── */
+
+    /* Hero */
+    .about-hero {
+      padding: calc(var(--nav-height) + 6rem) 0 5rem;
+      position: relative;
+    }
+    .about-hero-inner {
+      max-width: 760px;
+    }
+    .about-hero-label {
+      display: inline-flex; align-items: center; gap: 8px;
+      font-size: 0.72rem; font-weight: 600;
+      letter-spacing: 0.14em; text-transform: uppercase;
+      color: var(--accent-primary); margin-bottom: 1.5rem;
+    }
+    .about-hero-label::before {
+      content: ''; width: 18px; height: 1px;
+      background: var(--accent-primary);
+    }
+    .about-hero h1 {
+      font-family: var(--font-display);
+      font-size: clamp(3rem, 6vw, 5.5rem);
+      font-weight: 800; line-height: 1.05;
+      letter-spacing: -0.02em;
+      color: var(--text-primary);
+      margin-bottom: 2rem;
+    }
+    .about-hero h1 em {
+      font-style: normal;
+      color: var(--accent-primary);
+      position: relative;
+    }
+    .about-hero h1 em::after {
+      content: '';
+      position: absolute;
+      bottom: 4px; left: 0; right: 0;
+      height: 3px; background: var(--accent-gold);
+      border-radius: 2px; opacity: 0.55;
+    }
+    .about-hero-desc {
+      font-size: clamp(1rem, 1.6vw, 1.15rem);
+      color: var(--text-secondary);
+      line-height: 1.85; max-width: 580px;
+    }
+
+    /* Horizontal rule divider */
+    .about-rule {
+      border: none;
+      border-top: 1px solid var(--border);
+      margin: 0;
+    }
+
+    /* ── Stats strip ── */
+    .stats-strip {
+      display: flex;
+      gap: 0;
+      padding: 3rem 0;
+      border-top: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+    }
+    .strip-stat {
+      flex: 1;
+      padding: 0 2.5rem 0 0;
+      border-right: 1px solid var(--border);
+      margin-right: 2.5rem;
+    }
+    .strip-stat:last-child {
+      border-right: none; margin-right: 0;
+    }
+    .strip-stat-num {
+      font-family: var(--font-display);
+      font-size: 2.5rem; font-weight: 800;
+      color: var(--text-primary); line-height: 1;
+      margin-bottom: 6px;
+    }
+    .strip-stat-label {
+      font-size: 0.78rem; color: var(--text-muted);
+      letter-spacing: 0.05em;
+    }
+
+    /* ── Vision / Mission editorial ── */
+    .editorial-section { padding: clamp(60px, 8vw, 100px) 0; }
+
+    .editorial-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+
+    .editorial-label {
+      font-size: 0.68rem; font-weight: 700;
+      letter-spacing: 0.15em; text-transform: uppercase;
+      color: var(--accent-primary);
+      margin-bottom: 1.25rem;
+      display: flex; align-items: center; gap: 8px;
+    }
+    .editorial-label::before {
+      content: ''; width: 14px; height: 1px;
+      background: var(--accent-primary);
+    }
+
+    .editorial-heading {
+      font-family: var(--font-display);
+      font-size: clamp(1.6rem, 3vw, 2.4rem);
+      font-weight: 800; line-height: 1.15;
+      color: var(--text-primary);
+      margin-bottom: 1.5rem;
+      letter-spacing: -0.01em;
+    }
+
+    .editorial-body {
+      font-size: 0.95rem;
+      color: var(--text-secondary);
+      line-height: 1.85;
+    }
+    .editorial-body p { margin-bottom: 1rem; }
+    .editorial-body p:last-child { margin-bottom: 0; }
+    .editorial-body em {
+      font-style: italic;
+      color: var(--accent-primary);
+    }
+
+    /* Pull quote */
+    .pull-quote {
+      font-family: var(--font-display);
+      font-size: clamp(1.1rem, 2vw, 1.5rem);
+      font-weight: 700;
+      color: var(--text-primary);
+      line-height: 1.45;
+      padding-left: 1.5rem;
+      border-left: 3px solid var(--accent-gold);
+      margin: 2rem 0;
+    }
+
+    /* ── Approach list ── */
+    .approach-list {
+      display: flex; flex-direction: column; gap: 0;
+    }
+    .approach-item {
+      display: flex; align-items: flex-start; gap: 1.5rem;
+      padding: 1.5rem 0;
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition-fast);
+    }
+    .approach-item:first-child { border-top: 1px solid var(--border); }
+    .approach-num {
+      font-family: var(--font-display);
+      font-size: 0.72rem; font-weight: 700;
+      letter-spacing: 0.1em;
+      color: var(--text-muted);
+      min-width: 32px; padding-top: 3px;
+    }
+    .approach-content h4 {
+      font-family: var(--font-display);
+      font-size: 1rem; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 4px;
+    }
+    .approach-content p {
+      font-size: 0.88rem; color: var(--text-secondary);
+      line-height: 1.7; margin: 0;
+    }
+
+    /* ── Full-width feature bar ── */
+    .feature-bar {
+      background: var(--accent-primary);
+      padding: 3rem clamp(1.5rem, 5vw, 4rem);
+      display: flex; align-items: center;
+      justify-content: space-between;
+      gap: 2rem; flex-wrap: wrap;
+    }
+    .feature-bar-text {
+      font-family: var(--font-display);
+      font-size: clamp(1.2rem, 2.5vw, 1.75rem);
+      font-weight: 700; color: #fff;
+      max-width: 600px; line-height: 1.35;
+    }
+    .feature-bar-text span { opacity: 0.65; font-weight: 400; }
+
+    /* ── Founder editorial ── */
+    .founder-editorial {
+      padding: clamp(60px, 8vw, 100px) 0;
+      border-top: 1px solid var(--border);
+    }
+    .founder-editorial + .founder-editorial {
+      border-top: 1px solid var(--border);
+      padding-top: clamp(40px, 6vw, 80px);
+    }
+
+    .founder-layout {
+      display: grid;
+      grid-template-columns: 280px 1fr;
+      gap: 5rem;
+      align-items: start;
+    }
+    .founder-layout.reverse {
+      grid-template-columns: 1fr 280px;
+    }
+    .founder-layout.reverse .founder-photo-col { order: 2; }
+    .founder-layout.reverse .founder-text-col  { order: 1; }
+
+    .founder-photo-col { position: sticky; top: 100px; }
+
+    .founder-img-wrap {
+      position: relative;
+      width: 100%;
+      aspect-ratio: 3/4;
+      border-radius: var(--radius-lg);
+      overflow: hidden;
+      background: var(--bg-secondary);
+      border: 1px solid var(--border);
+    }
+    .founder-img-wrap img {
+      width: 100%; height: 100%;
+      object-fit: cover; display: block;
+    }
+    .founder-img-placeholder {
+      width: 100%; height: 100%;
+      display: flex; align-items: center;
+      justify-content: center;
+      font-family: var(--font-display);
+      font-size: 3rem; font-weight: 800;
+      color: var(--accent-primary);
+      opacity: 0.3;
+    }
+    .founder-img-caption {
+      margin-top: 1rem;
+    }
+    .founder-img-name {
+      font-family: var(--font-display);
+      font-size: 1rem; font-weight: 700;
+      color: var(--text-primary);
+    }
+    .founder-img-role {
+      font-size: 0.78rem; color: var(--text-muted);
+      margin-top: 2px;
+    }
+    .founder-img-badge {
+      display: inline-flex; align-items: center; gap: 5px;
+      margin-top: 8px;
+      font-size: 0.68rem; font-weight: 600;
+      letter-spacing: 0.08em; text-transform: uppercase;
+      color: var(--accent-primary);
+      background: rgba(45,74,62,0.08);
+      padding: 3px 10px; border-radius: 99px;
+      border: 1px solid rgba(45,74,62,0.15);
+    }
+    [data-theme="dark"] .founder-img-badge {
+      background: rgba(95,173,142,0.12);
+      border-color: rgba(95,173,142,0.2);
+    }
+
+   
+
+    .founder-quote-large {
+      font-family: var(--font-display);
+      font-size: clamp(1.05rem, 1.8vw, 1.35rem);
+      font-weight: 600;
+      color: var(--text-primary);
+      line-height: 1.6;
+      margin-bottom: 1.75rem;
+      position: relative;
+    }
+    .founder-quote-large::before {
+      content: '\201C';
+      font-size: 4rem;
+      color: var(--accent-primary);
+      opacity: 0.15;
+      position: absolute;
+      top: -1.5rem; left: -0.5rem;
+      font-family: var(--font-display);
+      line-height: 1;
+    }
+
+    .founder-body-text {
+      font-size: 0.93rem; color: var(--text-secondary);
+      line-height: 1.85;
+    }
+    .founder-body-text p { margin-bottom: 1rem; }
+    .founder-body-text p:last-child { margin-bottom: 0; }
+
+    .founder-sig {
+      margin-top: 2rem;
+      font-family: var(--font-display);
+      font-size: 1.1rem; font-weight: 700;
+      color: var(--accent-primary);
+      display: flex; align-items: center; gap: 8px;
+    }
+    .founder-sig::before {
+      content: '';
+      width: 24px; height: 1px;
+      background: var(--accent-primary);
+    }
+
+    /* ── Values ── */
+    .values-section {
+      padding: clamp(60px, 8vw, 100px) 0;
+      border-top: 1px solid var(--border);
+    }
+    .values-header {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      margin-bottom: 4rem;
+      align-items: end;
+    }
+    .values-header-left h2 {
+      font-family: var(--font-display);
+      font-size: clamp(2rem, 4vw, 3rem);
+      font-weight: 800; line-height: 1.1;
+      color: var(--text-primary);
+    }
+    .values-header-right p {
+      font-size: 0.95rem; color: var(--text-secondary);
+      line-height: 1.78;
+    }
+
+    .values-list {
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0;
+      border-top: 1px solid var(--border);
+      border-left: 1px solid var(--border);
+    }
+    .value-item {
+      padding: 2rem 1.75rem;
+      border-right: 1px solid var(--border);
+      border-bottom: 1px solid var(--border);
+      transition: background var(--transition-medium);
+    }
+    .value-item:hover { background: var(--bg-secondary); }
+
+    .value-item-num {
+      font-family: var(--font-display);
+      font-size: 0.7rem; font-weight: 700;
+      letter-spacing: 0.1em; color: var(--text-muted);
+      margin-bottom: 1rem;
+    }
+    .value-item h4 {
+      font-family: var(--font-display);
+      font-size: 1.05rem; font-weight: 700;
+      color: var(--text-primary); margin-bottom: 0.6rem;
+    }
+    .value-item p {
+      font-size: 0.85rem; color: var(--text-secondary);
+      line-height: 1.7; margin: 0;
+    }
+
+    /* ── Responsive ── */
+    @media (max-width: 1024px) {
+      .founder-layout,
+      .founder-layout.reverse {
+        grid-template-columns: 1fr;
+        gap: 2.5rem;
+      }
+      .founder-photo-col { position: static; }
+      .founder-layout.reverse .founder-photo-col { order: 1; }
+      .founder-layout.reverse .founder-text-col  { order: 2; }
+      .founder-img-wrap { max-width: 280px; }
+      .editorial-grid { grid-template-columns: 1fr; gap: 3rem; }
+      .values-header  { grid-template-columns: 1fr; gap: 1.5rem; }
+      .values-list    { grid-template-columns: 1fr 1fr; }
+    }
+
+    @media (max-width: 768px) {
+      .stats-strip { flex-direction: column; gap: 1.5rem; }
+      .strip-stat  { border-right: none; margin-right: 0; border-bottom: 1px solid var(--border); padding: 0 0 1.5rem; }
+      .strip-stat:last-child { border-bottom: none; padding-bottom: 0; }
+      .values-list { grid-template-columns: 1fr; }
+    }
+    .about-hero-grid {
+    display: grid;
+    grid-template-columns: 1fr 420px;
+    gap: 5rem;
+    align-items: center;
+    min-height: calc(100vh - var(--nav-height));
+    padding: 3rem 0;
+  }
+
+  /* Right panel */
+  .about-hero-right {
+    background: var(--bg-card);
+    border: 1px solid var(--border);
+    border-radius: var(--radius-xl);
+    padding: 1.75rem;
+    box-shadow: var(--shadow-md);
+    position: sticky;
+    top: calc(var(--nav-height) + 2rem);
+  }
+
+  /* Service pills */
+  .ahr-pills {
+    display: flex;
+    flex-direction: column;
+    gap: 0.75rem;
+  }
+
+  .ahr-pill {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 0.85rem 1rem;
+    background: var(--bg-secondary);
+    border: 1px solid var(--border);
+    border-radius: 12px;
+    transition: all var(--transition-fast);
+    cursor: default;
+  }
+
+  .ahr-pill:hover {
+    border-color: var(--border-hover);
+    transform: translateX(4px);
+    box-shadow: var(--shadow-xs);
+  }
+
+  .ahr-pill-icon {
+    width: 38px; height: 38px;
+    border-radius: 10px;
+    display: flex; align-items: center; justify-content: center;
+    font-size: 1.1rem; flex-shrink: 0;
+  }
+
+  .ahr-pill-name {
+    font-family: var(--font-display);
+    font-size: 0.88rem; font-weight: 700;
+    color: var(--text-primary);
+    line-height: 1;
+    margin-bottom: 3px;
+  }
+
+  .ahr-pill-sub {
+    font-size: 0.72rem;
+    color: var(--text-muted);
+  }
+
+  .ahr-pill-badge {
+    margin-left: auto;
+    font-size: 0.62rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: #16a34a;
+    background: rgba(34,197,94,0.1);
+    padding: 3px 8px; border-radius: 99px;
+    border: 1px solid rgba(34,197,94,0.2);
+    flex-shrink: 0;
+  }
+
+  /* Mini stats */
+  .ahr-stats {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 0;
+  }
+
+  .ahr-stat {
+    text-align: center;
+    padding: 0.5rem 0;
+    border-right: 1px solid var(--border);
+  }
+  .ahr-stat:last-child { border-right: none; }
+
+  .ahr-stat-num {
+    font-family: var(--font-display);
+    font-size: 1.4rem; font-weight: 800;
+    color: var(--text-primary); line-height: 1;
+    margin-bottom: 4px;
+  }
+
+  .ahr-stat-label {
+    font-size: 0.68rem;
+    color: var(--text-muted);
+    letter-spacing: 0.04em;
+  }
+
+  /* Responsive */
+  @media (max-width: 1100px) {
+    .about-hero-grid {
+      grid-template-columns: 1fr 360px;
+      gap: 3rem;
+    }
+  }
+
+  @media (max-width: 900px) {
+    .about-hero-grid {
+      grid-template-columns: 1fr;
+      min-height: auto;
+      padding: 2rem 0;
+      gap: 2.5rem;
+    }
+    .about-hero-right {
+      position: static;
+    }
+  }
+  </style>
 </head>
 <body>
 
-  <!-- ===================== PAGE LOADER ===================== -->
   <div id="page-loader">
     <div class="loader-inner">
       <div class="loader-logo">UNI-SERVICES</div>
@@ -18,217 +513,334 @@
     </div>
   </div>
 
-  <!-- BG Orbs -->
   <div class="bg-orbs" aria-hidden="true">
     <div class="orb orb-1"></div>
     <div class="orb orb-2"></div>
     <div class="orb orb-3"></div>
   </div>
 
-  <!-- ===================== NAVBAR ========================= -->
-  <!--  navbar.ejs   -->
-    <%- include('navbar') %>
-
-  <div class="nav-mobile">
+  <%- include('navbar') %>
+  <div class="nav-mobile" id="navMobile">
     <a href="/">Home</a>
     <a href="/about">About</a>
-    <a href="/contact" class="nav-cta">Get in Touch</a>  </div>
+    <a href="/contact" class="nav-cta">Get in Touch</a>
+  </div>
 
   <main>
 
-    <!-- ==================== PAGE HERO ==================== -->
-    <section class="page-hero section">
-      <div class="container">
-        <div class="section-tag reveal">Our Story</div>
-        <h1 class="section-title reveal reveal-delay-1" style="font-size:clamp(2.5rem,5vw,4.2rem); text-align:center; max-width:700px; margin:0 auto 1rem;">
-          We're Building the<br /><span class="gradient-text">Future of Digital Life</span>
+    <!-- ══ HERO ══ -->
+    <section class="about-hero">
+  <div class="container">
+    <div class="about-hero-grid">
+
+      <!-- Left: Headline -->
+      <div class="about-hero-inner">
+        <div class="about-hero-label reveal">Our Story</div>
+        <h1 class="reveal reveal-delay-1">
+          We're Building<br/>the <em>Future</em> of<br/>Digital Life
         </h1>
-        <p class="section-subtitle reveal reveal-delay-2" style="text-align:center;margin:0 auto;">
+        <p class="about-hero-desc reveal reveal-delay-2">
           UNI-SERVICES was born from a simple frustration: why should accessing great healthcare, entertainment, and storage require five different apps, five passwords, and five monthly fees?
         </p>
       </div>
-    </section>
 
-    <!-- ==================== VISION & MISSION ============= -->
-    <section class="section" style="padding-top:0;">
-      <div class="container">
-        <div class="about-grid">
+      <!-- Right: Visual panel -->
+      <div class="about-hero-right reveal reveal-delay-2">
 
-          <div class="about-block reveal">
-            <div class="about-block-icon">🔭</div>
-            <h3>Our Vision</h3>
-            <p>
-              A world where every person — regardless of geography or income — has frictionless access to world-class healthcare, entertainment, and secure digital infrastructure through one beautifully simple platform.
-            </p>
-            <br />
-            <p>
-              We envision UNI-SERVICES becoming the operating system of everyday digital life: the single trusted layer between people and the services that matter most.
-            </p>
-          </div>
-
-          <div class="about-block reveal reveal-delay-1">
-            <div class="about-block-icon">🎯</div>
-            <h3>Our Mission</h3>
-            <p>
-              To eliminate digital fragmentation by building deeply integrated, privacy-first services that respect users' time, data, and intelligence.
-            </p>
-            <br />
-            <p>
-              We design every product with one principle: <em style="color:var(--accent-cyan);">make the complex feel effortless.</em> From booking a doctor to booking a movie seat to storing a file — everything should feel like second nature.
-            </p>
-          </div>
-
-          <div class="about-block reveal">
-            <div class="about-block-icon">🧭</div>
-            <h3>Our Approach</h3>
-            <p>
-              We build iteratively, listen obsessively, and move with speed without sacrificing craft. Every pixel, every API response, and every support interaction is treated as a product decision.
-            </p>
-          </div>
-
-          <div class="about-block reveal reveal-delay-1">
-            <div class="about-block-icon">🌍</div>
-            <h3>Our Impact</h3>
-            <p>
-              Serving users across 40+ cities, we've enabled 120,000+ doctor consultations, sold 800,000+ event tickets, and securely store over 5 petabytes of personal and enterprise data.
-            </p>
-          </div>
-
-        </div><!-- /about-grid -->
-
-        <!-- ==================== FOUNDER ================== -->
-        <div class="founder-section reveal">
-
-  <div class="founder-avatar-wrap">
-    <div class="founder-avatar">
-      <img src="images/ayush-srivastava.jpeg" alt="Ayush Srivastava" />
-    </div>
-    <div class="founder-badge">Founder</div>
-  </div>
-
-  <div class="founder-content">
-    <div class="founder-tag">A Word From the Founder</div>
-
-    <div class="founder-name">
-      Ayush Srivastava
-    <span class="founder-verified" aria-label="Verified">✓</span>
-    </div>
-
-    <div class="founder-role">
-      Founder & CEO | UNI-SERVICES
-    </div>
-
-    <p class="founder-quote">
-      "When we started UNI-SERVICES, the motivation was clear: everyday life was being fragmented across too many apps. Simple tasks — booking an appointment, saving a document, planning an evening — felt unnecessarily complicated. We believed technology should do the opposite: it should simplify, unify, and make life easier.
-UNI-SERVICES isn’t just a product; it’s a philosophy. Our guiding principle is simple — if a feature makes someone’s day better, we build it. If it doesn’t, we leave it out. That discipline keeps us focused on what truly matters: creating digital experiences that reduce friction and bring clarity.
-As a founder, my vision is not to overwhelm users with options, but to give them one seamless platform that feels natural, intuitive, and genuinely helpful. That’s the promise of UNI-SERVICES, and it’s the standard we hold ourselves to every day."
-
-    </p>
-
-    <div class="founder-signature">
-      — Ayush
-    </div>
-
-  </div>
-
-  
-
-</div><!-- /founder-section -->
-
-<!-- ==================== CO-FOUNDER ================== -->
-        <div class="founder-section founder-section-reverse reveal">
-
-          <div class="founder-content">
-            <div class="founder-tag">A Word From the Co-Founder</div>
-
-            <div class="founder-name">
-              Vishal Yadav
-              <span class="founder-verified">✓</span>
+        <!-- Services pills -->
+        <div class="ahr-pills">
+          <div class="ahr-pill">
+            <span class="ahr-pill-icon" style="background:rgba(45,74,62,0.12)">🩺</span>
+            <div>
+              <div class="ahr-pill-name">UniCare+</div>
+              <div class="ahr-pill-sub">Healthcare · 500+ Specialists</div>
             </div>
-
-            <div class="founder-role">
-              Co-Founder & COO | UNI-SERVICES
-            </div>
-
-            <p class="founder-quote">
-              "I didn’t start UNI-SERVICES because apps were failing — I started it because they were disconnected. Healthcare, entertainment, and storage all evolved independently, but real life doesn’t operate in silos.
-
-UNI-SERVICES is built on a simple belief: essential digital services should feel connected, not scattered. Our goal isn’t to add more apps to your life — it’s to simplify how they work together.
-
-We design with intention, build with clarity, and focus only on what genuinely adds value."
-            </p>
-
-            <div class="founder-signature">
-              — Vishal
-            </div>
+            <span class="ahr-pill-badge">Live</span>
           </div>
-
-          <div class="founder-avatar-wrap">
-            <div class="founder-avatar">
-              <img src="" alt="Vishal Yadav" />
+          <div class="ahr-pill">
+            <span class="ahr-pill-icon" style="background:rgba(201,147,58,0.12)">🎬</span>
+            <div>
+              <div class="ahr-pill-name">UniShow</div>
+              <div class="ahr-pill-sub">Entertainment · 1000+ Venues</div>
             </div>
-            <div class="founder-badge">Co-Founder</div>
+            <span class="ahr-pill-badge">Live</span>
           </div>
-
+          <div class="ahr-pill">
+            <span class="ahr-pill-icon" style="background:rgba(192,115,90,0.12)">☁️</span>
+            <div>
+              <div class="ahr-pill-name">UniSpace</div>
+              <div class="ahr-pill-sub">Cloud Storage · Up to 2 TB</div>
+            </div>
+            <span class="ahr-pill-badge">Live</span>
+          </div>
         </div>
-        <!-- /co-founder-section -->
 
-        <!-- ==================== VALUES ================== -->
-        <div>
-          <div class="section-tag reveal" style="margin-bottom:1rem;">Our Values</div>
-          <h2 class="section-title reveal reveal-delay-1" style="margin-bottom:2.5rem;">The Principles We Live By</h2>
+        <!-- Divider -->
+        <div style="height:1px;background:var(--border);margin:1.5rem 0"></div>
 
-          <div class="values-grid">
-            <div class="value-card reveal">
-              <div class="value-num">01</div>
-              <h4>User Obsession</h4>
-              <p>Every decision starts and ends with the user. We track satisfaction metrics daily and treat every complaint as a gift.</p>
-            </div>
-
-            <div class="value-card reveal reveal-delay-1">
-              <div class="value-num">02</div>
-              <h4>Privacy by Default</h4>
-              <p>We don't sell data. We don't show ads. We make money only when users find genuine value in our services.</p>
-            </div>
-
-            <div class="value-card reveal reveal-delay-2">
-              <div class="value-num">03</div>
-              <h4>Craft Over Speed</h4>
-              <p>We'd rather ship something exceptional slowly than something mediocre fast. Quality is non-negotiable.</p>
-            </div>
-
-            <div class="value-card reveal">
-              <div class="value-num">04</div>
-              <h4>Radical Transparency</h4>
-              <p>We publish our uptime, our pricing, our data practices — openly. No dark patterns, no fine print traps.</p>
-            </div>
-
-            <div class="value-card reveal reveal-delay-1">
-              <div class="value-num">05</div>
-              <h4>Inclusive Design</h4>
-              <p>Our products are built for everyone — across ages, abilities, devices, and connectivity conditions.</p>
-            </div>
-
-            <div class="value-card reveal reveal-delay-2">
-              <div class="value-num">06</div>
-              <h4>Long-Term Thinking</h4>
-              <p>We optimize for a 10-year relationship with our users, not a 10-week growth chart. Loyalty is earned, not hacked.</p>
-            </div>
+        <!-- Mini stats row -->
+        <div class="ahr-stats">
+          <div class="ahr-stat">
+            <div class="ahr-stat-num">50K+</div>
+            <div class="ahr-stat-label">Active Users</div>
           </div>
-        </div><!-- /values -->
+          <div class="ahr-stat">
+            <div class="ahr-stat-num">99.9%</div>
+            <div class="ahr-stat-label">Uptime SLA</div>
+          </div>
+          <div class="ahr-stat">
+            <div class="ahr-stat-num">3</div>
+            <div class="ahr-stat-label">Core Services</div>
+          </div>
+        </div>
 
+        <!-- Bottom tag -->
+        <div style="margin-top:1.5rem;padding-top:1.25rem;border-top:1px solid var(--border);display:flex;align-items:center;gap:8px;">
+          <div style="width:7px;height:7px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,0.2);flex-shrink:0;animation:blink 2s ease-in-out infinite"></div>
+          <span style="font-size:0.76rem;color:var(--text-muted);font-weight:500">All systems operational · Prayagraj, India</span>
+        </div>
+
+      </div>
+
+    </div>
+  </div>
+</section>
+
+    <!-- ══ STATS STRIP ══ -->
+    <section>
+      <div class="container">
+        <div class="stats-strip reveal">
+          <div class="strip-stat">
+            <div class="strip-stat-num">120K+</div>
+            <div class="strip-stat-label">Doctor consultations enabled</div>
+          </div>
+          <div class="strip-stat">
+            <div class="strip-stat-num">800K+</div>
+            <div class="strip-stat-label">Event tickets sold</div>
+          </div>
+          <div class="strip-stat">
+            <div class="strip-stat-num">5 PB</div>
+            <div class="strip-stat-label">Data securely stored</div>
+          </div>
+          <div class="strip-stat">
+            <div class="strip-stat-num">40+</div>
+            <div class="strip-stat-label">Cities served</div>
+          </div>
+        </div>
       </div>
     </section>
 
-    <!-- ==================== CTA ========================== -->
+    <!-- ══ VISION & MISSION ══ -->
+    <section class="editorial-section">
+      <div class="container">
+        <div class="editorial-grid">
+
+          <div class="reveal">
+            <div class="editorial-label">Vision</div>
+            <h2 class="editorial-heading">One platform.<br/>Every life need.</h2>
+            <div class="editorial-body">
+              <p>A world where every person — regardless of geography or income — has frictionless access to world-class healthcare, entertainment, and secure digital infrastructure through one beautifully simple platform.</p>
+              <p>We envision UNI-SERVICES becoming the operating system of everyday digital life: the single trusted layer between people and the services that matter most.</p>
+            </div>
+          </div>
+
+          <div class="reveal reveal-delay-1">
+            <div class="editorial-label">Mission</div>
+            <h2 class="editorial-heading">Eliminate digital<br/>fragmentation.</h2>
+            <div class="editorial-body">
+              <p>To build deeply integrated, privacy-first services that respect users' time, data, and intelligence.</p>
+              <div class="pull-quote">
+                Make the complex feel effortless — that's the principle behind every product decision we make.
+              </div>
+              <p>From booking a doctor to booking a movie seat to storing a file — everything should feel like second nature.</p>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FULL WIDTH BAR ══ -->
+    <div class="feature-bar reveal">
+      <div class="feature-bar-text">
+        Three services. One login. Zero friction.<br/>
+        <span>Healthcare · Entertainment · Cloud Storage</span>
+      </div>
+      <a href="/#services" class="btn" style="background:#fff;color:var(--accent-primary);flex-shrink:0;">
+        Explore Services
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="5" y1="12" x2="19" y2="12"/><polyline points="12 5 19 12 12 19"/></svg>
+      </a>
+    </div>
+
+    <!-- ══ APPROACH ══ -->
+    <section class="editorial-section" style="padding-bottom:0">
+      <div class="container">
+        <div class="editorial-grid" style="gap:3rem">
+
+          <div class="reveal">
+            <div class="editorial-label">How We Work</div>
+            <h2 class="editorial-heading">Built different.<br/>Built better.</h2>
+            <div class="editorial-body">
+              <p>We build iteratively, listen obsessively, and move with speed without sacrificing craft. Every pixel, every API response, and every support interaction is treated as a product decision.</p>
+            </div>
+          </div>
+
+          <div class="approach-list reveal reveal-delay-1">
+            <div class="approach-item">
+              <div class="approach-num">01</div>
+              <div class="approach-content">
+                <h4>Privacy First</h4>
+                <p>Zero-knowledge architecture and end-to-end encryption. Your data is yours — always.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <div class="approach-num">02</div>
+              <div class="approach-content">
+                <h4>Lightning Fast</h4>
+                <p>Edge-deployed infrastructure ensures sub-100ms response times globally. No lag, ever.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <div class="approach-num">03</div>
+              <div class="approach-content">
+                <h4>Deeply Unified</h4>
+                <p>One account. One dashboard. All three services connected with a single sign-on.</p>
+              </div>
+            </div>
+            <div class="approach-item">
+              <div class="approach-num">04</div>
+              <div class="approach-content">
+                <h4>Human Support</h4>
+                <p>Real support agents, 24/7. No bots, no runarounds — just fast, empathetic help.</p>
+              </div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ FOUNDER — AYUSH ══ -->
+    <section class="founder-editorial">
+      <div class="container">
+        <div class="founder-layout">
+
+          <div class="founder-photo-col reveal">
+            <div class="founder-img-wrap">
+              <img src="images/ayush-srivastava.jpeg" alt="Ayush Srivastava"/>
+            </div>
+            <div class="founder-img-caption">
+              <div class="founder-img-name">Ayush Srivastava <span style="color:var(--accent-primary);font-size:0.85rem">✓</span></div>
+              <div class="founder-img-role">Founder & CEO</div>
+              <div class="founder-img-badge">Founder</div>
+            </div>
+          </div>
+
+          <div class="founder-text-col reveal reveal-delay-1">
+            <div class="editorial-label" style="margin-bottom:1.5rem">A Word From the Founder</div>
+            <div class="founder-quote-large">
+              "When we started UNI-SERVICES, the motivation was clear: everyday life was being fragmented across too many apps."
+            </div>
+            <div class="founder-body-text">
+              <p>Simple tasks — booking an appointment, saving a document, planning an evening — felt unnecessarily complicated. We believed technology should do the opposite: it should simplify, unify, and make life easier.</p>
+              <p>UNI-SERVICES isn't just a product; it's a philosophy. Our guiding principle is simple — if a feature makes someone's day better, we build it. If it doesn't, we leave it out. That discipline keeps us focused on what truly matters.</p>
+              <p>As a founder, my vision is not to overwhelm users with options, but to give them one seamless platform that feels natural, intuitive, and genuinely helpful. That's the promise of UNI-SERVICES, and it's the standard we hold ourselves to every day.</p>
+            </div>
+            <div class="founder-sig">Ayush</div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CO-FOUNDER — VISHAL ══ -->
+    <section class="founder-editorial">
+      <div class="container">
+        <div class="founder-layout reverse">
+
+          <div class="founder-text-col reveal">
+            <div class="editorial-label" style="margin-bottom:1.5rem">A Word From the Co-Founder</div>
+            <div class="founder-quote-large">
+              "I didn't start UNI-SERVICES because apps were failing — I started it because they were disconnected."
+            </div>
+            <div class="founder-body-text">
+              <p>Healthcare, entertainment, and storage all evolved independently, but real life doesn't operate in silos.</p>
+              <p>UNI-SERVICES is built on a simple belief: essential digital services should feel connected, not scattered. Our goal isn't to add more apps to your life — it's to simplify how they work together.</p>
+              <p>We design with intention, build with clarity, and focus only on what genuinely adds value.</p>
+            </div>
+            <div class="founder-sig">Vishal</div>
+          </div>
+
+          <div class="founder-photo-col reveal reveal-delay-1">
+            <div class="founder-img-wrap">
+              <div class="founder-img-placeholder">VY</div>
+            </div>
+            <div class="founder-img-caption">
+              <div class="founder-img-name">Vishal Yadav <span style="color:var(--accent-primary);font-size:0.85rem">✓</span></div>
+              <div class="founder-img-role">Co-Founder & COO</div>
+              <div class="founder-img-badge">Co-Founder</div>
+            </div>
+          </div>
+
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ VALUES ══ -->
+    <section class="values-section">
+      <div class="container">
+        <div class="values-header">
+          <div class="values-header-left reveal">
+            <div class="editorial-label" style="margin-bottom:1rem">Our Values</div>
+            <h2>The Principles<br/>We Live By</h2>
+          </div>
+          <div class="values-header-right reveal reveal-delay-1">
+            <p>These aren't posters on a wall. They're the filters through which every decision, hire, and product feature passes before it ships.</p>
+          </div>
+        </div>
+
+        <div class="values-list reveal reveal-delay-2">
+          <div class="value-item">
+            <div class="value-item-num">01</div>
+            <h4>User Obsession</h4>
+            <p>Every decision starts and ends with the user. We track satisfaction metrics daily and treat every complaint as a gift.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-num">02</div>
+            <h4>Privacy by Default</h4>
+            <p>We don't sell data. We don't show ads. We make money only when users find genuine value in our services.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-num">03</div>
+            <h4>Craft Over Speed</h4>
+            <p>We'd rather ship something exceptional slowly than something mediocre fast. Quality is non-negotiable.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-num">04</div>
+            <h4>Radical Transparency</h4>
+            <p>We publish our uptime, pricing, and data practices openly. No dark patterns, no fine print traps.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-num">05</div>
+            <h4>Inclusive Design</h4>
+            <p>Our products are built for everyone — across ages, abilities, devices, and connectivity conditions.</p>
+          </div>
+          <div class="value-item">
+            <div class="value-item-num">06</div>
+            <h4>Long-Term Thinking</h4>
+            <p>We optimize for a 10-year relationship with our users, not a 10-week growth chart. Loyalty is earned.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- ══ CTA ══ -->
     <section class="cta-section section">
       <div class="container">
         <div class="cta-box reveal">
           <div class="section-tag">Join Us</div>
           <h2 class="section-title">Become Part of the Story</h2>
-          <p class="section-subtitle">
-            We're growing — and we'd love for you to experience what we're building. Start exploring for free.
-          </p>
+          <p class="section-subtitle">We're growing — and we'd love for you to experience what we're building. Start exploring for free.</p>
           <div class="cta-actions">
             <a href="/#services" class="btn btn-primary">
               Explore Services
@@ -242,10 +854,7 @@ We design with intention, build with clarity, and focus only on what genuinely a
 
   </main>
 
-  <!-- ===================== FOOTER ========================= -->
-   <!-- inclue footer.ejs -->
   <%- include('footer') %>
-
   <script src="script.js"></script>
 </body>
 </html>

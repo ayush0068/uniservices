@@ -1,0 +1,811 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width,initial-scale=1.0"/>
+<title>Settings | UNI-SERVICES Admin</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root{
+  --bg:#faf9f7;--bg2:#f4f2ef;--bg3:#eceae6;--card:#ffffff;
+  --border:rgba(0,0,0,0.08);--border2:rgba(0,0,0,0.15);
+  --green:#2d4a3e;--green2:#3d6454;--green-lt:rgba(45,74,62,0.08);
+  --gold:#c9933a;--gold-lt:rgba(201,147,58,0.1);
+  --rose:#c0735a;--rose-lt:rgba(192,115,90,0.1);
+  --blue:#3b6fd4;--blue-lt:rgba(59,111,212,0.1);
+  --red:#c0392b;--red-lt:rgba(192,57,43,0.08);
+  --t1:#1a1a18;--t2:#5a5a54;--t3:#9a9a92;--inv:#faf9f7;
+  --radius:12px;--shadow:0 2px 8px rgba(0,0,0,0.07);
+  --shadow-md:0 8px 24px rgba(0,0,0,0.1);
+  --font:'Inter',sans-serif;--serif:'Playfair Display',serif;
+  --trans:0.25s ease;
+}
+[data-theme="dark"]{
+  --bg:#04060f;--bg2:#080c1a;--bg3:#0e1225;--card:rgba(255,255,255,0.04);
+  --border:rgba(255,255,255,0.09);--border2:rgba(255,255,255,0.18);
+  --green:#5fad8e;--green2:#4a9478;--green-lt:rgba(95,173,142,0.12);
+  --gold:#e8b86d;--gold-lt:rgba(232,184,109,0.1);
+  --rose:#d4886e;--rose-lt:rgba(212,136,110,0.1);
+  --blue:#6b9de8;--blue-lt:rgba(107,157,232,0.1);
+  --red:#e05c4a;--red-lt:rgba(224,92,74,0.1);
+  --t1:#eef0f8;--t2:#8b90a8;--t3:#4a5070;--inv:#04060f;
+  --shadow:0 2px 8px rgba(0,0,0,0.4);--shadow-md:0 8px 24px rgba(0,0,0,0.6);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+body{font-family:var(--font);background:var(--bg);color:var(--t1);-webkit-font-smoothing:antialiased;transition:background var(--trans),color var(--trans);min-height:100vh;padding:2rem clamp(1rem,4vw,3rem)}
+
+/* ── Layout ── */
+.settings-wrap{max-width:900px;margin:0 auto}
+.settings-header{margin-bottom:2rem}
+.settings-header h1{font-family:var(--serif);font-size:1.6rem;font-weight:800;color:var(--t1);margin-bottom:4px}
+.settings-header p{font-size:0.85rem;color:var(--t3)}
+.stag{display:inline-flex;align-items:center;gap:6px;font-size:0.65rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--green);margin-bottom:0.5rem}
+.stag::before{content:'';width:14px;height:1px;background:var(--green)}
+
+/* ── Section cards ── */
+.settings-section{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:1.25rem;overflow:hidden;transition:background var(--trans)}
+.section-head{display:flex;align-items:center;gap:12px;padding:1.1rem 1.5rem;cursor:pointer;user-select:none;border-bottom:1px solid var(--border);transition:background var(--trans)}
+.section-head:hover{background:var(--bg2)}
+.section-head-icon{width:36px;height:36px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1rem;flex-shrink:0}
+.section-head-text{flex:1}
+.section-head-text h3{font-size:0.92rem;font-weight:600;color:var(--t1)}
+.section-head-text p{font-size:0.75rem;color:var(--t3);margin-top:1px}
+.section-chevron{color:var(--t3);transition:transform var(--trans);flex-shrink:0}
+.section-head.open .section-chevron{transform:rotate(180deg)}
+.section-body{display:none;padding:0.5rem 0}
+.section-body.open{display:block}
+
+/* ── Setting row ── */
+.setting-row{display:flex;align-items:center;gap:1rem;padding:0.9rem 1.5rem;border-bottom:1px solid var(--border);transition:background var(--trans)}
+.setting-row:last-child{border-bottom:none}
+.setting-row:hover{background:var(--bg2)}
+.setting-info{flex:1;min-width:0}
+.setting-label{font-size:0.86rem;font-weight:600;color:var(--t1);margin-bottom:2px}
+.setting-desc{font-size:0.75rem;color:var(--t3);line-height:1.4}
+.setting-control{flex-shrink:0;display:flex;align-items:center;gap:8px}
+
+/* ── Toggle switch ── */
+.sw{position:relative;width:44px;height:26px;cursor:pointer;flex-shrink:0}
+.sw input{opacity:0;width:0;height:0;position:absolute}
+.sw-track{position:absolute;inset:0;border-radius:26px;background:#d1d1d6;transition:background 0.3s ease}
+.sw input:checked~.sw-track{background:var(--green)}
+.sw-thumb{position:absolute;top:3px;left:3px;width:20px;height:20px;border-radius:50%;background:#fff;box-shadow:0 1px 4px rgba(0,0,0,0.2);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1)}
+.sw input:checked~.sw-thumb{transform:translateX(18px)}
+.sw:active .sw-thumb{width:24px}
+.sw input:checked:active~.sw-thumb{transform:translateX(14px);width:24px}
+
+/* ── Select ── */
+.s-select{height:34px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 2rem 0 0.75rem;font-family:var(--font);font-size:0.82rem;color:var(--t1);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;transition:border-color var(--trans)}
+.s-select:focus{border-color:var(--green);outline:none}
+.s-select option{background:var(--card)}
+
+/* ── Input ── */
+.s-input{height:34px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.75rem;font-family:var(--font);font-size:0.82rem;color:var(--t1);outline:none;transition:border-color var(--trans),box-shadow var(--trans);width:180px}
+.s-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,74,62,0.1)}
+.s-input::placeholder{color:var(--t3)}
+
+/* ── Textarea ── */
+.s-textarea{background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0.6rem 0.75rem;font-family:var(--font);font-size:0.82rem;color:var(--t1);outline:none;resize:vertical;width:100%;transition:border-color var(--trans),box-shadow var(--trans);line-height:1.5}
+.s-textarea:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,74,62,0.1)}
+
+/* ── Color picker row ── */
+.color-row{display:flex;align-items:center;gap:8px}
+.color-swatch{width:28px;height:28px;border-radius:7px;border:2px solid var(--border2);cursor:pointer;transition:transform 0.15s ease}
+.color-swatch:hover{transform:scale(1.1)}
+.color-swatch.active{border-color:var(--green);box-shadow:0 0 0 2px var(--green)}
+
+/* ── Button ── */
+.s-btn{display:inline-flex;align-items:center;gap:6px;padding:0.45rem 1rem;border-radius:8px;font-family:var(--font);font-size:0.78rem;font-weight:600;cursor:pointer;transition:all var(--trans);border:1px solid var(--border2);background:transparent;color:var(--t2)}
+.s-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-lt)}
+.s-btn--primary{background:var(--green);color:var(--inv);border-color:transparent;box-shadow:0 2px 8px rgba(45,74,62,0.2)}
+.s-btn--primary:hover{background:var(--green2);color:var(--inv)}
+.s-btn--red{border-color:rgba(192,57,43,0.2);color:var(--red)}
+.s-btn--red:hover{background:var(--red-lt);border-color:var(--red)}
+
+/* ── Badge ── */
+.s-badge{font-size:0.65rem;font-weight:700;padding:2px 8px;border-radius:99px;letter-spacing:0.06em}
+.s-badge--green{background:var(--green-lt);color:var(--green)}
+.s-badge--gold{background:var(--gold-lt);color:var(--gold)}
+.s-badge--red{background:var(--red-lt);color:var(--red)}
+
+/* ── Range slider ── */
+.s-range{width:140px;accent-color:var(--green)}
+
+/* ── Toast ── */
+#toast{position:fixed;bottom:1.5rem;right:1.5rem;background:var(--t1);color:var(--inv);padding:0.7rem 1.25rem;border-radius:10px;font-size:0.82rem;font-weight:500;box-shadow:var(--shadow-md);z-index:9999;transform:translateY(80px);opacity:0;transition:all 0.35s cubic-bezier(0.4,0,0.2,1);display:flex;align-items:center;gap:8px;max-width:320px}
+#toast.show{transform:translateY(0);opacity:1}
+#toast.success{background:var(--green)}
+#toast.error{background:var(--red)}
+
+/* ── Danger zone ── */
+.danger-zone{border-color:rgba(192,57,43,0.25)!important}
+.danger-zone .section-head{background:var(--red-lt)!important}
+.danger-zone .section-head:hover{background:rgba(192,57,43,0.12)!important}
+.danger-zone .section-head-text h3{color:var(--red)}
+
+/* ── Full-width row ── */
+.setting-row--full{flex-direction:column;align-items:flex-start;gap:0.75rem}
+.setting-row--full .setting-control{width:100%}
+
+/* ── Status dot ── */
+.status-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0}
+.status-dot--green{background:#22c55e;box-shadow:0 0 0 3px rgba(34,197,94,0.2)}
+.status-dot--red{background:var(--red);box-shadow:0 0 0 3px rgba(192,57,43,0.2)}
+.status-dot--gold{background:var(--gold);box-shadow:0 0 0 3px rgba(201,147,58,0.2)}
+
+/* ── Preview pill ── */
+.preview-pill{display:inline-flex;align-items:center;gap:6px;padding:4px 12px;border-radius:99px;font-size:0.72rem;font-weight:600;border:1px solid var(--border)}
+
+/* Save bar */
+.save-bar{position:sticky;bottom:1rem;background:var(--card);border:1px solid var(--border2);border-radius:12px;padding:0.85rem 1.25rem;display:flex;align-items:center;justify-content:space-between;box-shadow:var(--shadow-md);margin-top:1.5rem;flex-wrap:wrap;gap:0.75rem;backdrop-filter:blur(12px)}
+.save-bar-text{font-size:0.82rem;color:var(--t2)}
+.save-bar-text span{color:var(--gold);font-weight:600}
+
+@media(max-width:600px){
+  .setting-row{flex-wrap:wrap}
+  .s-input{width:100%}
+  .s-range{width:100px}
+}
+</style>
+</head>
+<body>
+
+<div id="toast"></div>
+
+<div class="settings-wrap">
+
+  <div class="settings-header">
+    <div class="stag">Admin Panel</div>
+    <h1>Settings</h1>
+    <p>Control every aspect of UNI-SERVICES from one place.</p>
+  </div>
+
+  <!-- ══ 1. APPEARANCE ══ -->
+  <div class="settings-section">
+    <div class="section-head open" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--blue-lt)">🎨</div>
+      <div class="section-head-text">
+        <h3>Appearance</h3>
+        <p>Theme, colors, fonts and visual style</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body open">
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Site Theme</div>
+          <div class="setting-desc">Default theme for all visitors</div>
+        </div>
+        <div class="setting-control">
+          <select class="s-select" id="siteTheme" onchange="save('siteTheme',this.value)">
+            <option value="light">Light</option>
+            <option value="dark">Dark</option>
+            <option value="system">Follow System</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Accent Color</div>
+          <div class="setting-desc">Primary brand color across the site</div>
+        </div>
+        <div class="setting-control">
+          <div class="color-row" id="accentColors">
+            <div class="color-swatch active" style="background:#2d4a3e" data-color="#2d4a3e" onclick="pickColor(this,'accent')" title="Forest Green"></div>
+            <div class="color-swatch" style="background:#1e3a5f" data-color="#1e3a5f" onclick="pickColor(this,'accent')" title="Navy Blue"></div>
+            <div class="color-swatch" style="background:#5b2333" data-color="#5b2333" onclick="pickColor(this,'accent')" title="Burgundy"></div>
+            <div class="color-swatch" style="background:#4a3728" data-color="#4a3728" onclick="pickColor(this,'accent')" title="Warm Brown"></div>
+            <div class="color-swatch" style="background:#2d3a4a" data-color="#2d3a4a" onclick="pickColor(this,'accent')" title="Slate"></div>
+            <input type="color" id="customAccent" value="#2d4a3e" style="width:28px;height:28px;border-radius:7px;border:2px solid var(--border2);cursor:pointer;padding:1px" onchange="customColor(this,'accent')" title="Custom color"/>
+          </div>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Font Style</div>
+          <div class="setting-desc">Display font for headings</div>
+        </div>
+        <div class="setting-control">
+          <select class="s-select" id="fontStyle" onchange="save('fontStyle',this.value)">
+            <option value="playfair">Playfair Display (Elegant)</option>
+            <option value="inter">Inter (Modern)</option>
+            <option value="georgia">Georgia (Classic)</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Border Radius</div>
+          <div class="setting-desc">Roundness of cards and buttons</div>
+        </div>
+        <div class="setting-control" style="gap:12px">
+          <input type="range" class="s-range" id="radiusRange" min="0" max="32" value="12" step="4" oninput="document.getElementById('radiusVal').textContent=this.value+'px';save('borderRadius',this.value)"/>
+          <span id="radiusVal" style="font-size:0.78rem;color:var(--t2);min-width:32px">12px</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Animations</div>
+          <div class="setting-desc">Scroll reveal and page transition effects</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="save('animations',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Background Orbs</div>
+          <div class="setting-desc">Floating ambient background shapes</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="save('bgOrbs',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 2. SITE IDENTITY ══ -->
+  <div class="settings-section">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--green-lt)">🏷️</div>
+      <div class="section-head-text">
+        <h3>Site Identity</h3>
+        <p>Name, tagline, logo and branding</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Site Name</div>
+          <div class="setting-desc">Displayed in navbar and browser tab</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="text" id="siteName" placeholder="UNI-SERVICES" value="UNI-SERVICES" onchange="save('siteName',this.value)"/>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Tagline</div>
+          <div class="setting-desc">Shown in hero section and meta description</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="text" id="tagline" placeholder="Your Digital Ecosystem" value="Your Digital Ecosystem" onchange="save('tagline',this.value)" style="width:220px"/>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Footer Tagline</div>
+          <div class="setting-desc">Short text below logo in footer</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="text" id="footerTagline" placeholder="One Portal. Infinite Possibilities." value="One Portal. Infinite Possibilities." style="width:240px" onchange="save('footerTagline',this.value)"/>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Copyright Year</div>
+          <div class="setting-desc">Shown in footer</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="number" id="copyrightYear" value="2025" min="2020" max="2099" style="width:90px" onchange="save('copyrightYear',this.value)"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 3. CONTACT INFO ══ -->
+  <div class="settings-section">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--gold-lt)">📬</div>
+      <div class="section-head-text">
+        <h3>Contact Information</h3>
+        <p>Email, phone and address shown on contact page</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Public Email</div>
+          <div class="setting-desc">Shown on contact page and footer</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="email" id="publicEmail" value="uniservices013@gmail.com" style="width:230px" onchange="save('publicEmail',this.value)"/>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Phone Number</div>
+          <div class="setting-desc">Shown on contact page</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="tel" id="publicPhone" value="+91 8931878476" style="width:180px" onchange="save('publicPhone',this.value)"/>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Address</div>
+          <div class="setting-desc">Headquarters location</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="text" id="address" value="Prayagraj, Uttar Pradesh, India" style="width:260px" onchange="save('address',this.value)"/>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Support Hours</div>
+          <div class="setting-desc">Displayed on contact page</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="text" id="supportHours" value="24 / 7 · 365 days a year" style="width:200px" onchange="save('supportHours',this.value)"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 4. SERVICES CONTROL ══ -->
+  <div class="settings-section">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--rose-lt)">⚙️</div>
+      <div class="section-head-text">
+        <h3>Services Control</h3>
+        <p>Enable or disable individual services</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label" style="display:flex;align-items:center;gap:8px">🩺 UniCare+ <span class="s-badge s-badge--green">Live</span></div>
+          <div class="setting-desc">Online healthcare consultation platform</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="toggleService('unicare',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label" style="display:flex;align-items:center;gap:8px">🎬 UniShow <span class="s-badge s-badge--green">Live</span></div>
+          <div class="setting-desc">Movie and event ticket booking</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="toggleService('unishow',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label" style="display:flex;align-items:center;gap:8px">☁️ UniSpace <span class="s-badge s-badge--green">Live</span></div>
+          <div class="setting-desc">Encrypted cloud storage</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="toggleService('unispace',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Maintenance Mode</div>
+          <div class="setting-desc">Show "Coming Soon" to all visitors while you work</div>
+        </div>
+        <div class="setting-control" style="gap:10px">
+          <span class="s-badge s-badge--gold" id="maintBadge" style="display:none">Active</span>
+          <label class="sw"><input type="checkbox" id="maintToggle" onchange="toggleMaintenance(this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Contact Form</div>
+          <div class="setting-desc">Allow visitors to submit the contact form</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="save('contactForm',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 5. NOTIFICATIONS ══ -->
+  <div class="settings-section">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--blue-lt)">🔔</div>
+      <div class="section-head-text">
+        <h3>Notifications</h3>
+        <p>Email alerts and admin notification settings</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">New Contact Alert</div>
+          <div class="setting-desc">Email me when a new contact form is submitted</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="save('notifNewContact',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Notification Email</div>
+          <div class="setting-desc">Where admin alerts are sent</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="email" id="notifEmail" value="uniservices013@gmail.com" style="width:230px" onchange="save('notifEmail',this.value)"/>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Daily Summary</div>
+          <div class="setting-desc">Receive a daily digest of new messages</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" onchange="save('dailySummary',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Consent Banner</div>
+          <div class="setting-desc">Show cookie/privacy consent to new visitors</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="save('consentBanner',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 6. SEO & META ══ -->
+  <div class="settings-section">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--green-lt)">🔍</div>
+      <div class="section-head-text">
+        <h3>SEO &amp; Meta</h3>
+        <p>Search engine and social media settings</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row setting-row--full">
+        <div class="setting-info">
+          <div class="setting-label">Meta Description</div>
+          <div class="setting-desc">Shown in Google search results (max 160 chars)</div>
+        </div>
+        <div class="setting-control">
+          <textarea class="s-textarea" id="metaDesc" rows="2" maxlength="160" onchange="save('metaDesc',this.value)">UNI-SERVICES — A premium multi-service digital ecosystem. Explore UniCare+, UniShow, and UniSpace in one unified portal.</textarea>
+          <div style="font-size:0.7rem;color:var(--t3);margin-top:4px;text-align:right" id="metaCount">120 / 160</div>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Search Indexing</div>
+          <div class="setting-desc">Allow search engines to index the site</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="save('searchIndex',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">OG Image URL</div>
+          <div class="setting-desc">Image shown when sharing on social media</div>
+        </div>
+        <div class="setting-control">
+          <input class="s-input" type="url" id="ogImage" placeholder="https://yoursite.com/og.png" style="width:240px" onchange="save('ogImage',this.value)"/>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 7. SECURITY ══ -->
+  <div class="settings-section">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--rose-lt)">🔐</div>
+      <div class="section-head-text">
+        <h3>Security</h3>
+        <p>Admin access and authentication settings</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Session Duration</div>
+          <div class="setting-desc">Auto-logout after inactivity</div>
+        </div>
+        <div class="setting-control">
+          <select class="s-select" onchange="save('sessionDuration',this.value)">
+            <option value="2">2 hours</option>
+            <option value="8" selected>8 hours</option>
+            <option value="24">24 hours</option>
+            <option value="168">7 days</option>
+          </select>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Admin Status</div>
+          <div class="setting-desc">Current session status</div>
+        </div>
+        <div class="setting-control" style="gap:8px">
+          <div class="status-dot status-dot--green"></div>
+          <span style="font-size:0.8rem;color:var(--t2)">Active session</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Rate Limiting</div>
+          <div class="setting-desc">Limit contact form submissions (anti-spam)</div>
+        </div>
+        <div class="setting-control">
+          <label class="sw"><input type="checkbox" checked onchange="save('rateLimiting',this.checked)"><div class="sw-track"></div><div class="sw-thumb"></div></label>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Change Password</div>
+          <div class="setting-desc">Update admin login credentials via .env file</div>
+        </div>
+        <div class="setting-control">
+          <span style="font-size:0.75rem;color:var(--t3);background:var(--bg2);padding:4px 10px;border-radius:6px;border:1px solid var(--border);font-family:monospace">ADMIN_PASSWORD=***</span>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Force Logout All Sessions</div>
+          <div class="setting-desc">Immediately invalidate all active admin sessions</div>
+        </div>
+        <div class="setting-control">
+          <a href="/admin/logout" class="s-btn s-btn--red">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/><polyline points="16 17 21 12 16 7"/><line x1="21" y1="12" x2="9" y2="12"/></svg>
+            Logout Now
+          </a>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 8. SYSTEM INFO ══ -->
+  <div class="settings-section">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--bg3)">💻</div>
+      <div class="section-head-text">
+        <h3>System Info</h3>
+        <p>Platform status and technical details</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">Platform</div></div>
+        <div class="setting-control"><span class="preview-pill">Node.js + Express</span></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">Database</div></div>
+        <div class="setting-control" style="gap:8px">
+          <div class="status-dot status-dot--green"></div>
+          <span class="preview-pill">MongoDB</span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">View Engine</div></div>
+        <div class="setting-control"><span class="preview-pill">EJS</span></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">Email Service</div></div>
+        <div class="setting-control" style="gap:8px">
+          <div class="status-dot status-dot--green"></div>
+          <span class="preview-pill">Nodemailer + Gmail</span>
+        </div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">Hosting</div></div>
+        <div class="setting-control"><span class="preview-pill">Render.com</span></div>
+      </div>
+      <div class="setting-row">
+        <div class="setting-info"><div class="setting-label">Last Settings Save</div></div>
+        <div class="setting-control"><span style="font-size:0.78rem;color:var(--t3)" id="lastSaved">Never</span></div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- ══ 9. DANGER ZONE ══ -->
+  <div class="settings-section danger-zone">
+    <div class="section-head" onclick="toggle(this)">
+      <div class="section-head-icon" style="background:var(--red-lt)">⚠️</div>
+      <div class="section-head-text">
+        <h3>Danger Zone</h3>
+        <p>Irreversible actions — proceed with caution</p>
+      </div>
+      <svg class="section-chevron" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="6 9 12 15 18 9"/></svg>
+    </div>
+    <div class="section-body">
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Clear All Contacts</div>
+          <div class="setting-desc">Permanently delete all contact form submissions from database</div>
+        </div>
+        <div class="setting-control">
+          <button class="s-btn s-btn--red" onclick="dangerAction('clearContacts')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/></svg>
+            Clear All
+          </button>
+        </div>
+      </div>
+
+      <div class="setting-row">
+        <div class="setting-info">
+          <div class="setting-label">Reset Settings</div>
+          <div class="setting-desc">Restore all settings to their default values</div>
+        </div>
+        <div class="setting-control">
+          <button class="s-btn s-btn--red" onclick="dangerAction('resetSettings')">
+            <svg width="12" height="12" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+            Reset
+          </button>
+        </div>
+      </div>
+
+    </div>
+  </div>
+
+  <!-- Save bar -->
+  <div class="save-bar">
+    <div class="save-bar-text">Settings are saved to <span>localStorage</span> — connect backend to persist across devices</div>
+    <div style="display:flex;gap:0.6rem">
+      <button class="s-btn" onclick="loadSettings()">↺ Reset</button>
+      <button class="s-btn s-btn--primary" onclick="saveAll()">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"/><polyline points="17 21 17 13 7 13 7 21"/><polyline points="7 3 7 8 15 8"/></svg>
+        Save All Changes
+      </button>
+    </div>
+  </div>
+
+</div>
+
+<script>
+/* ── Theme ── */
+(function(){
+  const KEY='uni-admin-theme',root=document.documentElement;
+  function apply(t){root.setAttribute('data-theme',t);localStorage.setItem(KEY,t)}
+  apply(localStorage.getItem(KEY)||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light'));
+})();
+
+/* ── Section accordion ── */
+function toggle(head){
+  head.classList.toggle('open');
+  const body=head.nextElementSibling;
+  body.classList.toggle('open');
+}
+
+/* ── Toast ── */
+function toast(msg,type='success'){
+  const t=document.getElementById('toast');
+  t.className='show '+(type==='success'?'success':type==='error'?'error':'');
+  t.innerHTML=`<svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">${type==='success'?'<polyline points="20 6 9 17 4 12"/>':'<circle cx="12" cy="12" r="10"/><line x1="12" y1="8" x2="12" y2="12"/><line x1="12" y1="16" x2="12.01" y2="16"/>'}</svg> ${msg}`;
+  clearTimeout(t._t);
+  t._t=setTimeout(()=>{t.classList.remove('show')},2800);
+}
+
+/* ── Settings store ── */
+const STORE_KEY='uni-admin-settings';
+function getSettings(){return JSON.parse(localStorage.getItem(STORE_KEY)||'{}')}
+function setSettings(s){localStorage.setItem(STORE_KEY,JSON.stringify(s))}
+
+function save(key,val){
+  const s=getSettings();s[key]=val;setSettings(s);
+  document.getElementById('lastSaved').textContent='Just now';
+}
+
+function saveAll(){
+  setSettings(getSettings());
+  document.getElementById('lastSaved').textContent=new Date().toLocaleTimeString('en-IN');
+  toast('All settings saved successfully!');
+}
+
+function loadSettings(){
+  localStorage.removeItem(STORE_KEY);
+  toast('Settings reset to defaults','success');
+  setTimeout(()=>location.reload(),1000);
+}
+
+/* ── Meta description counter ── */
+const metaEl=document.getElementById('metaDesc');
+const metaCount=document.getElementById('metaCount');
+if(metaEl){
+  function updateCount(){metaCount.textContent=metaEl.value.length+' / 160'}
+  metaEl.addEventListener('input',updateCount);updateCount();
+}
+
+/* ── Color picker ── */
+function pickColor(el,type){
+  document.querySelectorAll('#accentColors .color-swatch').forEach(s=>s.classList.remove('active'));
+  el.classList.add('active');
+  save(type+'Color',el.dataset.color);
+  toast('Accent color updated — apply in style.css to take effect');
+}
+function customColor(el,type){
+  document.querySelectorAll('#accentColors .color-swatch').forEach(s=>s.classList.remove('active'));
+  save(type+'Color',el.value);
+  toast('Custom color saved');
+}
+
+/* ── Service toggle ── */
+function toggleService(name,enabled){
+  save('service_'+name,enabled);
+  toast(`${name} ${enabled?'enabled':'disabled'} — update routes in app.js to apply`);
+}
+
+/* ── Maintenance mode ── */
+function toggleMaintenance(on){
+  document.getElementById('maintBadge').style.display=on?'inline-flex':'none';
+  save('maintenance',on);
+  toast(on?'⚠ Maintenance mode ON — update app.js to redirect visitors':'Maintenance mode OFF');
+}
+
+/* ── Danger zone ── */
+function dangerAction(action){
+  const labels={clearContacts:'delete ALL contact messages? This cannot be undone.',resetSettings:'reset all settings to defaults?'};
+  if(!confirm('Are you sure you want to '+labels[action]))return;
+  if(action==='resetSettings'){loadSettings();return}
+  if(action==='clearContacts'){
+    fetch('/api/admin/contacts/clear-all',{method:'DELETE'})
+      .then(r=>r.json())
+      .then(d=>toast(d.success?'All contacts deleted':'Error: '+d.message,d.success?'success':'error'))
+      .catch(()=>toast('Add DELETE /api/admin/contacts/clear-all route in app.js','error'));
+  }
+}
+
+/* ── Load saved values on init ── */
+(function(){
+  const s=getSettings();
+  if(s.lastSaved)document.getElementById('lastSaved').textContent=s.lastSaved;
+  if(s.siteName)document.getElementById('siteName').value=s.siteName;
+  if(s.tagline)document.getElementById('tagline').value=s.tagline;
+  if(s.publicEmail)document.getElementById('publicEmail').value=s.publicEmail;
+  if(s.publicPhone)document.getElementById('publicPhone').value=s.publicPhone;
+  if(s.notifEmail)document.getElementById('notifEmail').value=s.notifEmail;
+})();
+</script>
+</body>
+</html>
