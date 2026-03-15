@@ -68,6 +68,8 @@ app.get('/unicare',     (req, res) => res.render('unicare-coming-soon',  { title
 app.get('/unishow',     (req, res) => res.render('unishow-coming-soon',  { title: 'UniShow' }));
 app.get('/unispace',    (req, res) => res.render('unispace-coming-soon', { title: 'UniSpace' }));
 app.get('/coming-soon', (req, res) => res.render('coming-soon',          { title: 'UniServices' }));
+app.get('/privacy', (req, res) => res.render('privacy', { title: 'Privacy Policy' }));
+app.get('/terms',   (req, res) => res.render('terms',   { title: 'Terms of Service' }));
 
 /* ── POST Contact Form ── */
 app.post('/contact', async (req, res) => {
