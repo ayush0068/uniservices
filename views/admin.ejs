@@ -1,0 +1,1001 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Admin | UNI-SERVICES</title>
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&family=Playfair+Display:wght@700;800&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --bg:        #faf9f7;
+  --bg2:       #f4f2ef;
+  --bg3:       #eceae6;
+  --card:      #ffffff;
+  --border:    rgba(0,0,0,0.08);
+  --border2:   rgba(0,0,0,0.15);
+  --green:     #2d4a3e;
+  --green2:    #3d6454;
+  --green-lt:  rgba(45,74,62,0.08);
+  --gold:      #c9933a;
+  --gold-lt:   rgba(201,147,58,0.1);
+  --rose:      #c0735a;
+  --rose-lt:   rgba(192,115,90,0.1);
+  --blue:      #3b6fd4;
+  --blue-lt:   rgba(59,111,212,0.1);
+  --t1:        #1a1a18;
+  --t2:        #5a5a54;
+  --t3:        #9a9a92;
+  --inv:       #faf9f7;
+  --sidebar-w: 240px;
+  --nav-h:     60px;
+  --radius:    12px;
+  --shadow:    0 2px 8px rgba(0,0,0,0.07);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.1);
+  --font:      'Inter', sans-serif;
+  --serif:     'Playfair Display', serif;
+  --trans:     0.25s ease;
+}
+[data-theme="dark"] {
+  --bg:        #04060f;
+  --bg2:       #080c1a;
+  --bg3:       #0e1225;
+  --card:      rgba(255,255,255,0.04);
+  --border:    rgba(255,255,255,0.09);
+  --border2:   rgba(255,255,255,0.18);
+  --green:     #5fad8e;
+  --green2:    #4a9478;
+  --green-lt:  rgba(95,173,142,0.12);
+  --gold:      #e8b86d;
+  --gold-lt:   rgba(232,184,109,0.1);
+  --rose:      #d4886e;
+  --rose-lt:   rgba(212,136,110,0.1);
+  --blue:      #6b9de8;
+  --blue-lt:   rgba(107,157,232,0.1);
+  --t1:        #eef0f8;
+  --t2:        #8b90a8;
+  --t3:        #4a5070;
+  --inv:       #04060f;
+  --shadow:    0 2px 8px rgba(0,0,0,0.4);
+  --shadow-md: 0 8px 24px rgba(0,0,0,0.6);
+}
+*,*::before,*::after{box-sizing:border-box;margin:0;padding:0}
+html{font-size:16px}
+body{font-family:var(--font);background:var(--bg);color:var(--t1);line-height:1.6;-webkit-font-smoothing:antialiased;overflow-x:hidden;transition:background var(--trans),color var(--trans)}
+a{color:inherit;text-decoration:none}
+ul{list-style:none}
+button{cursor:pointer;border:none;background:none;font-family:inherit}
+
+/* ── Layout ── */
+.layout{display:flex;min-height:100vh}
+
+/* ── Sidebar ── */
+.sidebar{
+  width:var(--sidebar-w);
+  background:var(--card);
+  border-right:1px solid var(--border);
+  display:flex;flex-direction:column;
+  position:fixed;top:0;left:0;bottom:0;
+  z-index:100;
+  transition:transform var(--trans),background var(--trans);
+}
+.sidebar-logo{
+  padding:1.25rem 1.5rem;
+  border-bottom:1px solid var(--border);
+  font-family:var(--serif);
+  font-size:1.1rem;font-weight:700;
+  color:var(--green);
+  letter-spacing:0.02em;
+  display:flex;align-items:center;gap:10px;
+}
+.sidebar-logo-dot{
+  width:8px;height:8px;
+  background:var(--green);
+  border-radius:50%;
+  animation:blink 2s ease-in-out infinite;
+}
+@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
+.sidebar-nav{flex:1;padding:1rem 0;overflow-y:auto}
+.nav-section-label{
+  font-size:0.65rem;font-weight:600;
+  letter-spacing:0.12em;text-transform:uppercase;
+  color:var(--t3);padding:0.75rem 1.5rem 0.4rem;
+}
+.nav-item{
+  display:flex;align-items:center;gap:10px;
+  padding:0.6rem 1.5rem;
+  font-size:0.875rem;font-weight:500;
+  color:var(--t2);
+  border-radius:0;
+  cursor:pointer;
+  transition:all var(--trans);
+  position:relative;
+}
+.nav-item:hover{color:var(--t1);background:var(--green-lt)}
+.nav-item.active{color:var(--green);background:var(--green-lt);font-weight:600}
+.nav-item.active::before{
+  content:'';position:absolute;left:0;top:20%;bottom:20%;
+  width:3px;background:var(--green);border-radius:0 2px 2px 0;
+}
+.nav-item .nav-icon{
+  width:18px;height:18px;flex-shrink:0;
+  display:flex;align-items:center;justify-content:center;
+}
+.nav-badge{
+  margin-left:auto;
+  background:var(--green);color:var(--inv);
+  font-size:0.65rem;font-weight:700;
+  padding:2px 7px;border-radius:99px;
+}
+.sidebar-footer{
+  padding:1rem 1.5rem;
+  border-top:1px solid var(--border);
+  display:flex;align-items:center;gap:10px;
+}
+.admin-avatar{
+  width:34px;height:34px;border-radius:50%;
+  background:var(--green-lt);border:1px solid var(--border2);
+  display:flex;align-items:center;justify-content:center;
+  font-size:0.75rem;font-weight:700;color:var(--green);
+  flex-shrink:0;
+}
+.admin-info{flex:1;min-width:0}
+.admin-name{font-size:0.82rem;font-weight:600;color:var(--t1);white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.admin-role{font-size:0.7rem;color:var(--t3)}
+
+/* ── Main ── */
+.main{margin-left:var(--sidebar-w);flex:1;display:flex;flex-direction:column;min-width:0}
+
+/* ── Topbar ── */
+.topbar{
+  height:var(--nav-h);
+  background:var(--card);
+  border-bottom:1px solid var(--border);
+  display:flex;align-items:center;
+  padding:0 1.5rem;gap:1rem;
+  position:sticky;top:0;z-index:50;
+  backdrop-filter:blur(12px);
+  transition:background var(--trans);
+}
+.topbar-title{font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--t1)}
+.topbar-right{margin-left:auto;display:flex;align-items:center;gap:0.75rem}
+.topbar-btn{
+  width:34px;height:34px;border-radius:8px;
+  border:1px solid var(--border);
+  background:transparent;
+  display:flex;align-items:center;justify-content:center;
+  color:var(--t2);
+  transition:all var(--trans);
+}
+.topbar-btn:hover{border-color:var(--green);color:var(--green);background:var(--green-lt)}
+
+/* Theme toggle in topbar */
+.theme-toggle{
+  position:relative;width:44px;height:26px;
+  cursor:pointer;flex-shrink:0;
+  background:none;border:none;padding:0;display:inline-block;
+}
+.theme-toggle input{opacity:0;width:0;height:0;position:absolute;pointer-events:none}
+.toggle-track{
+  position:absolute;inset:0;border-radius:26px;
+  background:#d1d1d6;
+  transition:background 0.3s cubic-bezier(0.4,0,0.2,1);overflow:hidden;
+}
+[data-theme="dark"] .toggle-track{background:#34c759}
+.toggle-icon--sun{position:absolute;right:5px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;opacity:1;transition:opacity 0.2s ease;pointer-events:none}
+.toggle-icon--moon{position:absolute;left:5px;top:50%;transform:translateY(-50%);display:flex;align-items:center;justify-content:center;opacity:0;transition:opacity 0.2s ease;pointer-events:none}
+[data-theme="dark"] .toggle-icon--sun{opacity:0}
+[data-theme="dark"] .toggle-icon--moon{opacity:1}
+.toggle-thumb{
+  position:absolute;top:2px;left:2px;
+  width:22px;height:22px;border-radius:50%;
+  background:#fff;
+  box-shadow:0 2px 5px rgba(0,0,0,0.22);
+  transition:transform 0.3s cubic-bezier(0.4,0,0.2,1),width 0.15s ease;
+  z-index:2;
+}
+[data-theme="dark"] .toggle-thumb{transform:translateX(18px)}
+.theme-toggle:active .toggle-thumb{width:26px}
+[data-theme="dark"] .theme-toggle:active .toggle-thumb{transform:translateX(14px);width:26px}
+
+/* ── Content ── */
+.content{padding:1.75rem;flex:1}
+
+/* ── Page (views) ── */
+.page{display:none;animation:fadeUp 0.4s ease}
+.page.active{display:block}
+@keyframes fadeUp{from{opacity:0;transform:translateY(16px)}to{opacity:1;transform:translateY(0)}}
+
+/* ── Stat Cards ── */
+.stats-grid{display:grid;grid-template-columns:repeat(4,1fr);gap:1rem;margin-bottom:1.75rem}
+.stat-card{
+  background:var(--card);border:1px solid var(--border);
+  border-radius:var(--radius);padding:1.25rem 1.5rem;
+  box-shadow:var(--shadow);
+  transition:all var(--trans);position:relative;overflow:hidden;
+}
+.stat-card::before{
+  content:'';position:absolute;top:0;left:0;right:0;height:3px;
+  background:var(--card-accent,var(--green));
+  border-radius:var(--radius) var(--radius) 0 0;
+}
+.stat-card:hover{transform:translateY(-3px);box-shadow:var(--shadow-md)}
+.stat-card-label{font-size:0.72rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);margin-bottom:0.5rem}
+.stat-card-value{font-family:var(--serif);font-size:1.8rem;font-weight:800;color:var(--t1);line-height:1}
+.stat-card-sub{font-size:0.75rem;color:var(--t3);margin-top:0.4rem}
+.stat-card-icon{position:absolute;right:1.25rem;top:50%;transform:translateY(-50%);font-size:1.8rem;opacity:0.12}
+
+/* ── Section header ── */
+.section-hdr{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.25rem;flex-wrap:wrap;gap:0.75rem}
+.section-hdr h2{font-family:var(--serif);font-size:1.15rem;font-weight:700;color:var(--t1)}
+.section-tag{display:inline-flex;align-items:center;gap:6px;font-size:0.68rem;font-weight:600;letter-spacing:0.12em;text-transform:uppercase;color:var(--green)}
+.section-tag::before{content:'';width:14px;height:1px;background:var(--green)}
+
+/* ── Card ── */
+.card{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);box-shadow:var(--shadow);overflow:hidden;transition:background var(--trans)}
+
+/* ── Table ── */
+.table-wrap{overflow-x:auto}
+table{width:100%;border-collapse:collapse;font-size:0.85rem}
+thead tr{border-bottom:1px solid var(--border)}
+th{padding:0.75rem 1rem;text-align:left;font-size:0.7rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3);white-space:nowrap}
+td{padding:0.85rem 1rem;color:var(--t2);border-bottom:1px solid var(--border);vertical-align:middle}
+tr:last-child td{border-bottom:none}
+tbody tr{transition:background var(--trans)}
+tbody tr:hover td{background:var(--green-lt);color:var(--t1)}
+
+/* ── Badge ── */
+.badge{display:inline-flex;align-items:center;gap:4px;padding:3px 9px;border-radius:99px;font-size:0.7rem;font-weight:600;white-space:nowrap}
+.badge-green{background:var(--green-lt);color:var(--green)}
+.badge-gold{background:var(--gold-lt);color:var(--gold)}
+.badge-rose{background:var(--rose-lt);color:var(--rose)}
+.badge-blue{background:var(--blue-lt);color:var(--blue)}
+.badge-gray{background:rgba(0,0,0,0.06);color:var(--t3)}
+[data-theme="dark"] .badge-gray{background:rgba(255,255,255,0.08)}
+
+/* ── Button ── */
+.btn{display:inline-flex;align-items:center;gap:6px;padding:0.55rem 1.2rem;border-radius:8px;font-size:0.82rem;font-weight:600;transition:all var(--trans);cursor:pointer;border:none;font-family:inherit}
+.btn-primary{background:var(--green);color:var(--inv);box-shadow:0 2px 8px rgba(45,74,62,0.2)}
+.btn-primary:hover{background:var(--green2);transform:translateY(-1px)}
+.btn-ghost{background:transparent;border:1px solid var(--border2);color:var(--t2)}
+.btn-ghost:hover{border-color:var(--green);color:var(--green);background:var(--green-lt)}
+.btn-sm{padding:0.35rem 0.9rem;font-size:0.76rem}
+.btn-icon{width:30px;height:30px;padding:0;justify-content:center;border-radius:6px}
+
+/* ── Search + filter bar ── */
+.toolbar{display:flex;align-items:center;gap:0.75rem;padding:1rem 1.25rem;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.search-wrap{position:relative;flex:1;min-width:180px}
+.search-wrap svg{position:absolute;left:10px;top:50%;transform:translateY(-50%);color:var(--t3);pointer-events:none}
+.search-input{width:100%;height:34px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.75rem 0 2.25rem;font-family:inherit;font-size:0.83rem;color:var(--t1);outline:none;transition:border-color var(--trans),box-shadow var(--trans)}
+.search-input::placeholder{color:var(--t3)}
+.search-input:focus{border-color:var(--green);box-shadow:0 0 0 3px rgba(45,74,62,0.1)}
+select.filter-select{height:34px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 2rem 0 0.75rem;font-family:inherit;font-size:0.83rem;color:var(--t1);outline:none;appearance:none;background-image:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='14' height='14' viewBox='0 0 24 24' fill='none' stroke='%23888' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'/%3E%3C/svg%3E");background-repeat:no-repeat;background-position:right 8px center;cursor:pointer;transition:border-color var(--trans)}
+select.filter-select:focus{border-color:var(--green);outline:none}
+select.filter-select option{background:var(--card)}
+
+/* ── Empty state ── */
+.empty-state{text-align:center;padding:3.5rem 1rem;color:var(--t3)}
+.empty-state-icon{font-size:2.5rem;margin-bottom:0.75rem;opacity:0.5}
+.empty-state p{font-size:0.88rem}
+
+/* ── Activity feed ── */
+.activity-list{display:flex;flex-direction:column}
+.activity-item{display:flex;align-items:flex-start;gap:12px;padding:0.9rem 1.25rem;border-bottom:1px solid var(--border);transition:background var(--trans)}
+.activity-item:last-child{border-bottom:none}
+.activity-item:hover{background:var(--green-lt)}
+.activity-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;margin-top:6px}
+.activity-text{font-size:0.83rem;color:var(--t2);flex:1}
+.activity-text strong{color:var(--t1);font-weight:600}
+.activity-time{font-size:0.72rem;color:var(--t3);white-space:nowrap;margin-left:auto}
+
+/* ── Quick stats row ── */
+.mini-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:1rem;margin-bottom:1.75rem}
+.mini-stat{background:var(--card);border:1px solid var(--border);border-radius:var(--radius);padding:1rem 1.25rem;box-shadow:var(--shadow);display:flex;align-items:center;gap:12px;transition:all var(--trans)}
+.mini-stat:hover{transform:translateY(-2px);box-shadow:var(--shadow-md)}
+.mini-stat-icon{width:40px;height:40px;border-radius:10px;display:flex;align-items:center;justify-content:center;font-size:1.1rem;flex-shrink:0}
+.mini-stat-val{font-family:var(--serif);font-size:1.4rem;font-weight:800;color:var(--t1);line-height:1}
+.mini-stat-label{font-size:0.72rem;color:var(--t3);margin-top:2px}
+
+/* ── Detail modal ── */
+.modal-overlay{position:fixed;inset:0;background:rgba(0,0,0,0.45);backdrop-filter:blur(4px);z-index:200;display:flex;align-items:center;justify-content:center;opacity:0;pointer-events:none;transition:opacity 0.25s ease}
+.modal-overlay.open{opacity:1;pointer-events:all}
+.modal{background:var(--card);border:1px solid var(--border2);border-radius:20px;padding:2rem;width:90%;max-width:520px;box-shadow:var(--shadow-md);transform:scale(0.92);transition:transform 0.3s cubic-bezier(0.4,0,0.2,1);max-height:90vh;overflow-y:auto}
+.modal-overlay.open .modal{transform:scale(1)}
+.modal-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:1.5rem}
+.modal-title{font-family:var(--serif);font-size:1.2rem;font-weight:700;color:var(--t1)}
+.modal-close{width:30px;height:30px;border-radius:8px;border:1px solid var(--border);display:flex;align-items:center;justify-content:center;color:var(--t3);transition:all var(--trans);cursor:pointer;background:transparent}
+.modal-close:hover{border-color:var(--rose);color:var(--rose);background:var(--rose-lt)}
+.modal-row{display:flex;flex-direction:column;gap:4px;margin-bottom:1rem}
+.modal-row:last-child{margin-bottom:0}
+.modal-label{font-size:0.7rem;font-weight:600;letter-spacing:0.08em;text-transform:uppercase;color:var(--t3)}
+.modal-val{font-size:0.9rem;color:var(--t1);background:var(--bg2);padding:0.6rem 0.85rem;border-radius:8px;border:1px solid var(--border);word-break:break-word}
+
+/* ── Responsive ── */
+@media(max-width:1024px){.stats-grid{grid-template-columns:repeat(2,1fr)}}
+@media(max-width:768px){
+
+  .sidebar{
+    transform:translateX(-100%);
+    background: var(--bg);
+  }
+
+  .sidebar.open{
+    transform:translateX(0)
+  }
+
+  .main{margin-left:0}
+
+}
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .mini-stats{grid-template-columns:1fr}
+  .content{padding:1rem}
+  .topbar{padding:0 1rem}
+
+@media(max-width:480px){.stats-grid{grid-template-columns:1fr}}
+
+/* Sidebar overlay on mobile */
+.sidebar-overlay{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:99}
+@media(max-width:768px){.sidebar-overlay.open{display:block}}
+
+
+/* Mobile menu btn */
+.mobile-menu-btn{display:none;width:34px;height:34px;border-radius:8px;border:1px solid var(--border);background:transparent;align-items:center;justify-content:center;color:var(--t2);cursor:pointer;flex-shrink:0}
+@media(max-width:768px){.mobile-menu-btn{display:flex}}
+@media (max-width:768px) {
+  :root {
+    --red: #c0392b;
+    --red-lt: rgba(192,57,43,0.08);
+  }
+  .stats-grid{grid-template-columns:1fr 1fr}
+  .mini-stats{grid-template-columns:1fr}
+  .content{padding:1rem}
+  .topbar{padding:0 1rem}
+  .reply-success { background: var(--green-lt); color: var(--green); border: 1px solid rgba(45,74,62,0.15); }
+  .reply-error   { background: var(--red-lt,rgba(192,57,43,0.08)); color: var(--red,#c0392b); border: 1px solid rgba(192,57,43,0.15); }
+  [data-theme="dark"] .reply-success { background: rgba(95,173,142,0.12); color: var(--green); }
+}
+</style>
+</head>
+<body>
+
+<div class="layout">
+
+  <!-- ── Sidebar ── -->
+  <aside class="sidebar" id="sidebar">
+    <div class="sidebar-logo">
+      <span class="sidebar-logo-dot"></span>
+      UNI-SERVICES
+    </div>
+
+    <nav class="sidebar-nav">
+      <div class="nav-section-label">Main</div>
+      <div class="nav-item active" data-page="dashboard">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="3" y="3" width="7" height="7"/><rect x="14" y="3" width="7" height="7"/><rect x="14" y="14" width="7" height="7"/><rect x="3" y="14" width="7" height="7"/></svg></span>
+        Dashboard
+      </div>
+      <div class="nav-item" data-page="contacts">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/></svg></span>
+        Contact Messages
+        <span class="nav-badge" id="badge-count">0</span>
+      </div>
+
+      <div class="nav-section-label" style="margin-top:0.5rem">Services</div>
+      <div class="nav-item" data-page="unicare">
+        <span class="nav-icon">🩺</span>
+        UniCare+
+      </div>
+      <div class="nav-item" data-page="unishow">
+        <span class="nav-icon">🎬</span>
+        UniShow
+      </div>
+      <div class="nav-item" data-page="unispace">
+        <span class="nav-icon">☁️</span>
+        UniSpace
+      </div>
+
+      <div class="nav-section-label" style="margin-top:0.5rem">System</div>
+      <div class="nav-item" data-page="settings">
+        <span class="nav-icon"><svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1-2.83 2.83l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-4 0v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83-2.83l.06-.06A1.65 1.65 0 0 0 4.68 15a1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1 0-4h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 2.83-2.83l.06.06A1.65 1.65 0 0 0 9 4.68a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 4 0v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 2.83l-.06.06A1.65 1.65 0 0 0 19.4 9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 0 4h-.09a1.65 1.65 0 0 0-1.51 1z"/></svg></span>
+        Settings
+      </div>
+    </nav>
+
+    <div class="sidebar-footer" style="flex-direction:column;gap:0.75rem;align-items:stretch;">
+  <div style="display:flex;align-items:center;gap:10px;">
+    <div class="admin-avatar">AD</div>
+    <div class="admin-info">
+      <div class="admin-name">Admin</div>
+      <div class="admin-role">Super Admin</div>
+    </div>
+  </div>
+  <a href="/admin/logout"
+    style="display:flex;align-items:center;justify-content:center;gap:8px;
+           width:100%;padding:0.55rem 0;border-radius:8px;
+           font-size:0.8rem;font-weight:600;
+           color:#c0392b;border:1px solid rgba(192,57,43,0.2);
+           background:rgba(192,57,43,0.05);
+           transition:all 0.2s ease;text-decoration:none;"
+    onmouseover="this.style.background='rgba(192,57,43,0.12)';this.style.borderColor='rgba(192,57,43,0.4)'"
+    onmouseout="this.style.background='rgba(192,57,43,0.05)';this.style.borderColor='rgba(192,57,43,0.2)'">
+    <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round">
+      <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+      <polyline points="16 17 21 12 16 7"/>
+      <line x1="21" y1="12" x2="9" y2="12"/>
+    </svg>
+    Logout
+  </a>
+</div>
+  </aside>
+
+  <div class="sidebar-overlay" id="sidebarOverlay"></div>
+
+  <!-- ── Main ── -->
+  <div class="main">
+
+    <!-- Topbar -->
+    <header class="topbar">
+      <button class="mobile-menu-btn" id="mobileMenuBtn">
+        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><line x1="3" y1="6" x2="21" y2="6"/><line x1="3" y1="12" x2="21" y2="12"/><line x1="3" y1="18" x2="21" y2="18"/></svg>
+      </button>
+      <div class="topbar-title" id="topbarTitle">Dashboard</div>
+      <div class="topbar-right">
+        <label class="theme-toggle" aria-label="Toggle dark mode">
+          <input type="checkbox" id="themeCheckbox" tabindex="-1">
+          <div class="toggle-track">
+            <span class="toggle-icon--sun"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg></span>
+            <span class="toggle-icon--moon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span>
+          </div>
+          <div class="toggle-thumb"></div>
+        </label>
+        <button class="topbar-btn" title="Refresh" onclick="location.reload()">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg>
+        </button>
+        <a href="/" class="topbar-btn" title="View site">
+          <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M18 13v6a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2V8a2 2 0 0 1 2-2h6"/><polyline points="15 3 21 3 21 9"/><line x1="10" y1="14" x2="21" y2="3"/></svg>
+        </a>
+      </div>
+    </header>
+
+    <!-- ── Content ── -->
+    <div class="content">
+
+      <!-- ══ DASHBOARD PAGE ══ -->
+      <div class="page active" id="page-dashboard">
+        <div class="section-hdr" style="margin-bottom:1.5rem">
+          <div>
+            <div class="section-tag">Overview</div>
+            <h2 style="font-family:var(--serif);font-size:1.4rem;margin-top:4px">Welcome back, Admin 👋</h2>
+          </div>
+          <span style="font-size:0.78rem;color:var(--t3)" id="currentDate"></span>
+        </div>
+
+        <!-- Stat cards -->
+        <div class="stats-grid">
+          <div class="stat-card" style="--card-accent:var(--green)">
+            <div class="stat-card-label">Total Messages</div>
+            <div class="stat-card-value" id="stat-total">0</div>
+            <div class="stat-card-sub">All time contacts</div>
+            <div class="stat-card-icon">✉️</div>
+          </div>
+          <div class="stat-card" style="--card-accent:var(--gold)">
+            <div class="stat-card-label">New Today</div>
+            <div class="stat-card-value" id="stat-today">0</div>
+            <div class="stat-card-sub">Last 24 hours</div>
+            <div class="stat-card-icon">📬</div>
+          </div>
+          <div class="stat-card" style="--card-accent:var(--blue)">
+            <div class="stat-card-label">This Week</div>
+            <div class="stat-card-value" id="stat-week">0</div>
+            <div class="stat-card-sub">Last 7 days</div>
+            <div class="stat-card-icon">📅</div>
+          </div>
+          <div class="stat-card" style="--card-accent:var(--rose)">
+            <div class="stat-card-label">Pending Reply</div>
+            <div class="stat-card-value" id="stat-pending">0</div>
+            <div class="stat-card-sub">Needs attention</div>
+            <div class="stat-card-icon">⏳</div>
+          </div>
+        </div>
+
+        <!-- Mini service stats -->
+        <div class="mini-stats">
+          <div class="mini-stat">
+            <div class="mini-stat-icon" style="background:var(--green-lt)">🩺</div>
+            <div>
+              <div class="mini-stat-val" id="ms-unicare">0</div>
+              <div class="mini-stat-label">UniCare+ enquiries</div>
+            </div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-icon" style="background:var(--gold-lt)">🎬</div>
+            <div>
+              <div class="mini-stat-val" id="ms-unishow">0</div>
+              <div class="mini-stat-label">UniShow enquiries</div>
+            </div>
+          </div>
+          <div class="mini-stat">
+            <div class="mini-stat-icon" style="background:var(--rose-lt)">☁️</div>
+            <div>
+              <div class="mini-stat-val" id="ms-unispace">0</div>
+              <div class="mini-stat-label">UniSpace enquiries</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Recent activity -->
+        <div class="section-hdr">
+          <h2>Recent Messages</h2>
+          <button class="btn btn-ghost btn-sm" onclick="goTo('contacts')">View all →</button>
+        </div>
+        <div class="card">
+          <div class="activity-list" id="recent-list">
+            <div class="empty-state">
+              <div class="empty-state-icon">📭</div>
+              <p>No messages yet. They'll appear here when contacts submit the form.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ CONTACTS PAGE ══ -->
+      <div class="page" id="page-contacts">
+        <div class="section-hdr" style="margin-bottom:1.25rem">
+          <div>
+            <div class="section-tag">Inbox</div>
+            <h2 style="font-family:var(--serif);font-size:1.4rem;margin-top:4px">Contact Messages</h2>
+          </div>
+          <button class="btn btn-primary btn-sm" onclick="exportCSV()">
+            <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="7 10 12 15 17 10"/><line x1="12" y1="15" x2="12" y2="3"/></svg>
+            Export CSV
+          </button>
+        </div>
+
+        <div class="card">
+          <div class="toolbar">
+            <div class="search-wrap">
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="11" cy="11" r="8"/><line x1="21" y1="21" x2="16.65" y2="16.65"/></svg>
+              <input class="search-input" id="searchInput" placeholder="Search name, email, message…" oninput="filterTable()"/>
+            </div>
+            <select class="filter-select" id="subjectFilter" onchange="filterTable()">
+              <option value="">All topics</option>
+              <option value="general">General</option>
+              <option value="unicare">UniCare+</option>
+              <option value="unishow">UniShow</option>
+              <option value="unispace">UniSpace</option>
+              <option value="partnership">Partnership</option>
+              <option value="press">Press</option>
+              <option value="careers">Careers</option>
+            </select>
+            <select class="filter-select" id="statusFilter" onchange="filterTable()">
+              <option value="">All status</option>
+              <option value="new">New</option>
+              <option value="read">Read</option>
+              <option value="replied">Replied</option>
+            </select>
+          </div>
+          <div class="table-wrap">
+            <table id="contactsTable">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>Name</th>
+                  <th>Email</th>
+                  <th>Subject</th>
+                  <th>Message</th>
+                  <th>Date</th>
+                  <th>Status</th>
+                  <th>Action</th>
+                </tr>
+              </thead>
+              <tbody id="contactsTbody">
+                <tr><td colspan="8"><div class="empty-state"><div class="empty-state-icon">📭</div><p>No messages yet.</p></div></td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+      </div>
+
+      <!-- ══ SERVICE PAGES (placeholder) ══ -->
+      <div class="page" id="page-unicare">
+        <div class="section-tag" style="margin-bottom:1rem">UniCare+</div>
+        <h2 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:1.5rem">UniCare+ Management</h2>
+        <div class="card" style="padding:3rem;text-align:center">
+          <div style="font-size:2.5rem;margin-bottom:1rem">🩺</div>
+          <div style="font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--t1);margin-bottom:0.5rem">Coming Soon</div>
+          <div style="font-size:0.85rem;color:var(--t3)">UniCare+ admin panel — backend integration pending.</div>
+        </div>
+      </div>
+      <div class="page" id="page-unishow">
+        <div class="section-tag" style="margin-bottom:1rem">UniShow</div>
+        <h2 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:1.5rem">UniShow Management</h2>
+        <div class="card" style="padding:3rem;text-align:center">
+          <div style="font-size:2.5rem;margin-bottom:1rem">🎬</div>
+          <div style="font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--t1);margin-bottom:0.5rem">Coming Soon</div>
+          <div style="font-size:0.85rem;color:var(--t3)">UniShow admin panel — backend integration pending.</div>
+        </div>
+      </div>
+      <div class="page" id="page-unispace">
+        <div class="section-tag" style="margin-bottom:1rem">UniSpace</div>
+        <h2 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:1.5rem">UniSpace Management</h2>
+        <div class="card" style="padding:3rem;text-align:center">
+          <div style="font-size:2.5rem;margin-bottom:1rem">☁️</div>
+          <div style="font-family:var(--serif);font-size:1.1rem;font-weight:700;color:var(--t1);margin-bottom:0.5rem">Coming Soon</div>
+          <div style="font-size:0.85rem;color:var(--t3)">UniSpace admin panel — backend integration pending.</div>
+        </div>
+      </div>
+      <div class="page" id="page-settings">
+        <div class="section-tag" style="margin-bottom:1rem">System</div>
+        <h2 style="font-family:var(--serif);font-size:1.4rem;margin-bottom:1.5rem">Settings</h2>
+        <div class="card" style="padding:2rem">
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 0;border-bottom:1px solid var(--border)">
+            <div><div style="font-size:0.88rem;font-weight:600;color:var(--t1)">Dark Mode</div><div style="font-size:0.76rem;color:var(--t3)">Toggle light / dark theme</div></div>
+            <label class="theme-toggle" aria-label="Toggle dark mode"><input type="checkbox" id="themeCheckbox2" tabindex="-1"><div class="toggle-track"><span class="toggle-icon--sun"><svg width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><circle cx="12" cy="12" r="4"/><line x1="12" y1="2" x2="12" y2="5"/><line x1="12" y1="19" x2="12" y2="22"/><line x1="4.22" y1="4.22" x2="6.34" y2="6.34"/><line x1="17.66" y1="17.66" x2="19.78" y2="19.78"/><line x1="2" y1="12" x2="5" y2="12"/><line x1="19" y1="12" x2="22" y2="12"/><line x1="4.22" y1="19.78" x2="6.34" y2="17.66"/><line x1="17.66" y1="6.34" x2="19.78" y2="4.22"/></svg></span><span class="toggle-icon--moon"><svg width="10" height="10" viewBox="0 0 24 24" fill="none" stroke="#fff" stroke-width="2.5" stroke-linecap="round"><path d="M21 12.79A9 9 0 1 1 11.21 3 7 7 0 0 0 21 12.79z"/></svg></span></div><div class="toggle-thumb"></div></label>
+          </div>
+          <div style="display:flex;align-items:center;justify-content:space-between;padding:1rem 0">
+            <div><div style="font-size:0.88rem;font-weight:600;color:var(--t1)">Admin Email</div><div style="font-size:0.76rem;color:var(--t3)">uniservices013@gmail.com</div></div>
+            <span class="badge badge-green">Active</span>
+          </div>
+        </div>
+      </div>
+
+    </div><!-- /content -->
+  </div><!-- /main -->
+</div><!-- /layout -->
+
+<!-- ── Message Detail Modal ── -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal">
+    <div class="modal-header">
+      <div class="modal-title">Message Detail</div>
+      <button class="modal-close" onclick="closeModal()">
+        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="18" y1="6" x2="6" y2="18"/><line x1="6" y1="6" x2="18" y2="18"/></svg>
+      </button>
+    </div>
+
+    <!-- Message details -->
+    <div id="modalBody"></div>
+
+    <!-- Reply form -->
+    <div id="replySection" style="margin-top:1.25rem;border-top:1px solid var(--border);padding-top:1.25rem;display:none;">
+      <div style="font-size:0.75rem;font-weight:600;letter-spacing:0.1em;text-transform:uppercase;color:var(--t3);margin-bottom:0.75rem;">Compose Reply</div>
+
+      <div style="margin-bottom:0.85rem;">
+        <label style="font-size:0.76rem;font-weight:600;color:var(--t2);display:block;margin-bottom:0.35rem;letter-spacing:0.04em;">Subject</label>
+        <input type="text" id="replySubject" placeholder="Re: UniCare+ Support — UNI-SERVICES"
+          style="width:100%;height:40px;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0 0.85rem;font-family:inherit;font-size:0.84rem;color:var(--t1);outline:none;transition:border-color 0.2s ease,box-shadow 0.2s ease;"
+          onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.1)'"
+          onblur="this.style.borderColor='';this.style.boxShadow=''"/>
+      </div>
+
+      <div style="margin-bottom:1rem;">
+        <label style="font-size:0.76rem;font-weight:600;color:var(--t2);display:block;margin-bottom:0.35rem;letter-spacing:0.04em;">Message <span style="color:#c0392b;">*</span></label>
+        <textarea id="replyMessage" rows="5" placeholder="Type your reply here…"
+          style="width:100%;background:var(--bg2);border:1px solid var(--border);border-radius:8px;padding:0.75rem 0.85rem;font-family:inherit;font-size:0.84rem;color:var(--t1);outline:none;resize:vertical;transition:border-color 0.2s ease,box-shadow 0.2s ease;line-height:1.65;"
+          onfocus="this.style.borderColor='var(--green)';this.style.boxShadow='0 0 0 3px rgba(45,74,62,0.1)'"
+          onblur="this.style.borderColor='';this.style.boxShadow=''"></textarea>
+      </div>
+
+      <!-- Status message -->
+      <div id="replyStatus" style="font-size:0.8rem;margin-bottom:0.75rem;display:none;padding:0.6rem 0.85rem;border-radius:8px;"></div>
+
+      <div style="display:flex;gap:0.65rem;flex-wrap:wrap;">
+        <button class="btn btn-primary btn-sm" id="sendReplyBtn" onclick="sendReply()">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+          Send Reply
+        </button>
+        <button class="btn btn-ghost btn-sm" onclick="toggleReply(false)">Cancel</button>
+      </div>
+    </div>
+
+    <!-- Action buttons -->
+    <div style="display:flex;gap:0.65rem;margin-top:1.25rem;flex-wrap:wrap;" id="modalActions">
+      <button class="btn btn-primary btn-sm" onclick="toggleReply(true)">
+        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><polyline points="9 17 4 12 9 7"/><path d="M20 18v-2a4 4 0 0 0-4-4H4"/></svg>
+        Reply
+      </button>
+      <button class="btn btn-ghost btn-sm" onclick="closeModal()">Close</button>
+    </div>
+  </div>
+</div>
+
+<script>
+    /* ── Yeh poora <script> block admin.ejs ke andar replace karo ── */
+
+/* Theme */
+(function(){
+  const KEY='uni-admin-theme',root=document.documentElement;
+  function apply(t){root.setAttribute('data-theme',t);localStorage.setItem(KEY,t);document.querySelectorAll('.theme-toggle input[type="checkbox"]').forEach(c=>c.checked=t==='dark')}
+  const saved=localStorage.getItem(KEY)||(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light');
+  apply(saved);window.__applyTheme=apply;
+  document.addEventListener('DOMContentLoaded',()=>{
+    document.querySelectorAll('.theme-toggle input[type="checkbox"]').forEach(cb=>{cb.addEventListener('change',function(){window.__applyTheme(this.checked?'dark':'light')})});
+  });
+})();
+
+let contacts = [];
+
+/* ── Navigation ── */
+const pages={};
+document.querySelectorAll('.page').forEach(p=>pages[p.id.replace('page-','')]=p);
+const navItems=document.querySelectorAll('.nav-item');
+const topbarTitle=document.getElementById('topbarTitle');
+const pageTitles={dashboard:'Dashboard',contacts:'Contact Messages',unicare:'UniCare+',unishow:'UniShow',unispace:'UniSpace',settings:'Settings'};
+
+function goTo(name){
+  navItems.forEach(n=>n.classList.toggle('active',n.dataset.page===name));
+  Object.entries(pages).forEach(([k,v])=>v.classList.toggle('active',k===name));
+  topbarTitle.textContent=pageTitles[name]||name;
+  closeSidebar();
+  if(name==='contacts')renderTable(contacts);
+  if(name==='dashboard')renderDashboard();
+}
+navItems.forEach(n=>n.addEventListener('click',()=>goTo(n.dataset.page)));
+
+/* ── Mobile sidebar ── */
+const sidebar=document.getElementById('sidebar');
+const overlay=document.getElementById('sidebarOverlay');
+document.getElementById('mobileMenuBtn').addEventListener('click',()=>{sidebar.classList.add('open');overlay.classList.add('open')});
+function closeSidebar(){sidebar.classList.remove('open');overlay.classList.remove('open')}
+overlay.addEventListener('click',closeSidebar);
+
+/* ── Date ── */
+document.getElementById('currentDate').textContent=new Date().toLocaleDateString('en-IN',{weekday:'long',year:'numeric',month:'long',day:'numeric'});
+
+/* ── Fetch contacts from API ── */
+async function fetchContacts(){
+  try {
+    const res = await fetch('/api/admin/contacts');
+    const data = await res.json();
+    if(data.success){
+      contacts = data.contacts.map(c => ({
+        id: c._id,
+        name: c.name,
+        email: c.email,
+        subject: c.subject,
+        message: c.message,
+        date: c.createdAt,
+        status: c.status || 'new'
+      }));
+    }
+  } catch(e){ console.error('Failed to fetch contacts', e) }
+}
+
+/* ── Fetch stats from API ── */
+async function fetchStats(){
+  try {
+    const res = await fetch('/api/admin/stats');
+    const d = await res.json();
+    if(d.success){
+      document.getElementById('stat-total').textContent   = d.total;
+      document.getElementById('stat-today').textContent   = d.today;
+      document.getElementById('stat-week').textContent    = d.week;
+      document.getElementById('stat-pending').textContent = d.pending;
+      document.getElementById('ms-unicare').textContent   = d.unicare;
+      document.getElementById('ms-unishow').textContent   = d.unishow;
+      document.getElementById('ms-unispace').textContent  = d.unispace;
+      document.getElementById('badge-count').textContent  = d.pending;
+    }
+  } catch(e){ console.error('Failed to fetch stats', e) }
+}
+
+/* ── Dashboard ── */
+function renderDashboard(){
+  const list=document.getElementById('recent-list');
+  const recent=[...contacts].sort((a,b)=>new Date(b.date)-new Date(a.date)).slice(0,5);
+  if(!recent.length){list.innerHTML='<div class="empty-state"><div class="empty-state-icon">📭</div><p>No messages yet.</p></div>';return}
+  list.innerHTML=recent.map(c=>`
+    <div class="activity-item" style="cursor:pointer" onclick="openModal('${c.id}')">
+      <div class="activity-dot" style="background:${c.status==='new'?'var(--green)':c.status==='replied'?'var(--blue)':'var(--t3)'}"></div>
+      <div class="activity-text"><strong>${c.name}</strong> — ${c.message.slice(0,60)}…</div>
+      <div class="activity-time">${timeAgo(c.date)}</div>
+    </div>`).join('');
+}
+
+/* ── Table ── */
+function subjectLabel(s){return{general:'General',unicare:'UniCare+',unishow:'UniShow',unispace:'UniSpace',partnership:'Partnership',press:'Press',careers:'Careers'}[s]||s}
+function subjectBadge(s){return{unicare:'badge-green',unishow:'badge-gold',unispace:'badge-rose',partnership:'badge-blue'}[s]||'badge-gray'}
+function statusBadge(s){return s==='new'?'badge-green':s==='replied'?'badge-blue':'badge-gray'}
+
+function renderTable(data){
+  const tbody=document.getElementById('contactsTbody');
+  if(!data.length){tbody.innerHTML='<tr><td colspan="8"><div class="empty-state"><div class="empty-state-icon">🔍</div><p>No results found.</p></div></td></tr>';return}
+  tbody.innerHTML=data.map((c,i)=>`
+    <tr>
+      <td style="color:var(--t3);font-size:0.76rem">${String(i+1).padStart(2,'0')}</td>
+      <td style="font-weight:600;color:var(--t1)">${c.name}</td>
+      <td><a href="mailto:${c.email}" style="color:var(--green)">${c.email}</a></td>
+      <td><span class="badge ${subjectBadge(c.subject)}">${subjectLabel(c.subject)}</span></td>
+      <td style="max-width:200px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap">${c.message}</td>
+      <td style="white-space:nowrap;font-size:0.78rem">${new Date(c.date).toLocaleDateString('en-IN',{day:'2-digit',month:'short',year:'numeric'})}</td>
+      <td>
+        <select class="filter-select" style="height:28px;font-size:0.72rem;padding:0 1.5rem 0 0.5rem" onchange="updateStatus('${c.id}',this.value)">
+          <option value="new"     ${c.status==='new'?'selected':''}>New</option>
+          <option value="read"    ${c.status==='read'?'selected':''}>Read</option>
+          <option value="replied" ${c.status==='replied'?'selected':''}>Replied</option>
+        </select>
+      </td>
+      <td style="display:flex;gap:6px">
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="openModal('${c.id}')" title="View">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><path d="M1 12s4-8 11-8 11 8 11 8-4 8-11 8-11-8-11-8z"/><circle cx="12" cy="12" r="3"/></svg>
+        </button>
+        <button class="btn btn-ghost btn-sm btn-icon" onclick="deleteContact('${c.id}')" title="Delete" style="color:var(--red,#c0392b)">
+          <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><polyline points="3 6 5 6 21 6"/><path d="M19 6l-1 14a2 2 0 0 1-2 2H8a2 2 0 0 1-2-2L5 6"/><path d="M10 11v6"/><path d="M14 11v6"/><path d="M9 6V4h6v2"/></svg>
+        </button>
+      </td>
+    </tr>`).join('');
+}
+
+function filterTable(){
+  const q=document.getElementById('searchInput').value.toLowerCase();
+  const sub=document.getElementById('subjectFilter').value;
+  const st=document.getElementById('statusFilter').value;
+  const filtered=contacts.filter(c=>
+    (!q||c.name.toLowerCase().includes(q)||c.email.toLowerCase().includes(q)||c.message.toLowerCase().includes(q))&&
+    (!sub||c.subject===sub)&&(!st||c.status===st));
+  renderTable(filtered);
+}
+
+/* ── Update status ── */
+async function updateStatus(id, status){
+  try {
+    const res = await fetch(`/api/admin/contacts/${id}/status`,{method:'PATCH',headers:{'Content-Type':'application/json'},body:JSON.stringify({status})});
+    const d = await res.json();
+    if(d.success){
+      const c=contacts.find(x=>x.id===id);
+      if(c)c.status=status;
+      await fetchStats();
+    }
+  } catch(e){ console.error(e) }
+}
+
+/* ── Delete ── */
+async function deleteContact(id){
+  if(!confirm('Delete this message permanently?'))return;
+  try {
+    const res=await fetch(`/api/admin/contacts/${id}`,{method:'DELETE'});
+    const d=await res.json();
+    if(d.success){
+      contacts=contacts.filter(c=>c.id!==id);
+      renderTable(contacts);
+      await fetchStats();
+    }
+  } catch(e){ console.error(e) }
+}
+
+/* ── Modal ── */
+let currentContactId = null;
+
+/* ── openModal ── */
+function openModal(id) {
+  const c = contacts.find(x => x.id === id);
+  if (!c) return;
+  currentContactId = id;
+
+  document.getElementById('modalBody').innerHTML = `
+    <div class="modal-row"><div class="modal-label">From</div><div class="modal-val">${c.name}</div></div>
+    <div class="modal-row"><div class="modal-label">Email</div><div class="modal-val"><a href="mailto:${c.email}" style="color:var(--green)">${c.email}</a></div></div>
+    <div class="modal-row"><div class="modal-label">Subject</div><div class="modal-val">${subjectLabel(c.subject)}</div></div>
+    <div class="modal-row"><div class="modal-label">Received</div><div class="modal-val">${new Date(c.date).toLocaleString('en-IN')}</div></div>
+    <div class="modal-row">
+      <div class="modal-label">Status</div>
+      <div class="modal-val"><span class="badge ${statusBadge(c.status)}">${c.status}</span></div>
+    </div>
+    ${c.repliedAt ? `<div class="modal-row"><div class="modal-label">Replied At</div><div class="modal-val">${new Date(c.repliedAt).toLocaleString('en-IN')}</div></div>` : ''}
+    <div class="modal-row"><div class="modal-label">Message</div><div class="modal-val" style="white-space:pre-wrap;line-height:1.75">${c.message}</div></div>
+    ${c.replyMessage ? `<div class="modal-row"><div class="modal-label">Your Last Reply</div><div class="modal-val" style="white-space:pre-wrap;line-height:1.75;border-left:3px solid var(--green);padding-left:0.75rem;">${c.replyMessage}</div></div>` : ''}`;
+
+  /* Pre-fill subject */
+  document.getElementById('replySubject').value = `Re: ${subjectLabel(c.subject)} — UNI-SERVICES`;
+  document.getElementById('replyMessage').value = '';
+  document.getElementById('replyStatus').style.display = 'none';
+  toggleReply(false);
+
+  document.getElementById('modalOverlay').classList.add('open');
+
+  /* Mark as read */
+  if (c.status === 'new') updateStatus(id, 'read');
+}
+
+function closeModal() {
+  document.getElementById('modalOverlay').classList.remove('open');
+  currentContactId = null;
+}
+
+/* ── Toggle reply form ── */
+function toggleReply(show) {
+  document.getElementById('replySection').style.display  = show ? 'block' : 'none';
+  document.getElementById('modalActions').style.display  = show ? 'none'  : 'flex';
+  if (show) document.getElementById('replyMessage').focus();
+}
+
+/* ── Send reply ── */
+async function sendReply() {
+  const msg  = document.getElementById('replyMessage').value.trim();
+  const subj = document.getElementById('replySubject').value.trim();
+  const btn  = document.getElementById('sendReplyBtn');
+  const statusEl = document.getElementById('replyStatus');
+
+  if (!msg) {
+    statusEl.textContent = '⚠ Please write a reply message.';
+    statusEl.className = 'reply-error';
+    statusEl.style.display = 'block';
+    return;
+  }
+
+  btn.disabled = true;
+  btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="animation:spin 1s linear infinite"><polyline points="23 4 23 10 17 10"/><path d="M20.49 15a9 9 0 1 1-2.12-9.36L23 10"/></svg> Sending…`;
+
+  try {
+    const res = await fetch(`/api/admin/contacts/${currentContactId}/reply`, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json' },
+      body: JSON.stringify({ replyMessage: msg, replySubject: subj })
+    });
+    const data = await res.json();
+
+    if (data.success) {
+      /* Update local state */
+      const c = contacts.find(x => x.id === currentContactId);
+      if (c) { c.status = 'replied'; c.replyMessage = msg; c.repliedAt = new Date().toISOString(); }
+
+      statusEl.textContent = `✓ Reply sent successfully!`;
+      statusEl.className = 'reply-success';
+      statusEl.style.display = 'block';
+      btn.innerHTML = '✓ Sent!';
+
+      /* Refresh table + stats */
+      renderTable(contacts);
+      await fetchStats();
+
+      /* Close after 1.8s */
+      setTimeout(() => closeModal(), 1800);
+    } else {
+      statusEl.textContent = `✗ ${data.message}`;
+      statusEl.className = 'reply-error';
+      statusEl.style.display = 'block';
+      btn.disabled = false;
+      btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Reply`;
+    }
+  } catch (err) {
+    statusEl.textContent = '✗ Network error. Try again.';
+    statusEl.className = 'reply-error';
+    statusEl.style.display = 'block';
+    btn.disabled = false;
+    btn.innerHTML = `<svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg> Send Reply`;
+  }
+}
+
+/* Spin animation */
+document.head.insertAdjacentHTML('beforeend',`<style>@keyframes spin{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}</style>`);
+
+document.getElementById('modalOverlay').addEventListener('click', function(e) { if (e.target === this) closeModal(); });
+document.addEventListener('keydown', e => { if (e.key === 'Escape') closeModal(); });
+
+/* ── Export CSV ── */
+function exportCSV(){
+  const headers=['#','Name','Email','Subject','Message','Date','Status'];
+  const rows=contacts.map((c,i)=>[i+1,`"${c.name}"`,c.email,subjectLabel(c.subject),`"${c.message.replace(/"/g,'""')}"`,new Date(c.date).toLocaleDateString('en-IN'),c.status]);
+  const csv=[headers,...rows].map(r=>r.join(',')).join('\n');
+  const a=document.createElement('a');
+  a.href='data:text/csv;charset=utf-8,'+encodeURIComponent(csv);
+  a.download=`uni-contacts-${new Date().toISOString().split('T')[0]}.csv`;
+  a.click();
+}
+
+/* ── Time ago ── */
+function timeAgo(d){
+  const diff=(Date.now()-new Date(d))/1000;
+  if(diff<60)return'Just now';
+  if(diff<3600)return Math.floor(diff/60)+'m ago';
+  if(diff<86400)return Math.floor(diff/3600)+'h ago';
+  return Math.floor(diff/86400)+'d ago';
+}
+
+/* ── Init ── */
+(async function init(){
+  await fetchContacts();
+  await fetchStats();
+  renderDashboard();
+})();
+</script>
+</body>
+</html>

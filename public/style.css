@@ -259,6 +259,24 @@ button { cursor: pointer; border: none; background: none; font-family: inherit; 
   box-shadow: var(--shadow-sm) !important;
 }
 
+.nav-cta1 {
+  padding: 0.5rem 1.25rem !important;
+  border-radius: 8px !important;
+  font-size: 0.85rem !important;
+  font-weight: 600 !important;
+  background: rgb(192, 76, 76) !important;
+  color: white !important;
+  border: none !important;
+  transition: background var(--transition-fast), box-shadow var(--transition-fast) !important;
+}
+
+.nav-cta::after { display: none !important; }
+
+.nav-cta1:hover {
+  background: #935d5d !important;
+  box-shadow: var(--shadow-sm) !important;
+}
+
 /* Hamburger */
 .hamburger {
   display: none;
@@ -1720,5 +1738,3 @@ body {
   color: var(--text-inverse) !important;
   background: var(--accent-primary) !important;
 }
-
-

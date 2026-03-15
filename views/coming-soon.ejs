@@ -47,6 +47,29 @@
 </head>
 <body class="cs-body">
 
+    <!--  navbar.ejs   -->
+    <%- include('navbar') %>
+
+  <!-- Mobile nav -->
+  <div class="nav-mobile" id="navMobile">
+    <a href="/">Home</a>
+    <a href="/about">About</a>
+    <a href="/contact" class="nav-cta">Get in Touch</a>
+  </div>
+
+
+<div id="redirect-banner" class="redirect-banner">
+    <div class="redirect-content">
+        <span class="redirect-icon">↩</span>
+        <span class="redirect-text">
+            Redirecting in <b id="redirect-timer">10</b>s
+        </span>
+        <div class="redirect-progress">
+            <div class="redirect-bar" id="redirect-bar"></div>
+        </div>
+    </div>
+</div>
+
   <!-- Orbs -->
   <div class="cs-orbs" aria-hidden="true">
     <div class="cs-orb cs-orb-1"></div>
@@ -161,7 +184,7 @@
     root.setAttribute('data-theme', preferred);
 
     /* ── Countdown — set your launch date here ── */
-    const LAUNCH = new Date('2025-12-31T00:00:00');
+    const LAUNCH = new Date('2026-04-01T00:00:00');
 
     function pad(n) { return String(n).padStart(2, '0'); }
 
@@ -286,6 +309,60 @@
     });
 
   })();
+
+
+  /* ============================================================
+   AUTO REDIRECT WITH COUNTDOWN
+   ============================================================ */
+
+/* ============================================================
+   MODERN AUTO REDIRECT
+============================================================ */
+
+(function(){
+
+  let REDIRECT_TIME = 20; // change anytime
+
+  const timer = document.getElementById("redirect-timer");
+  const bar   = document.getElementById("redirect-bar");
+
+  const previousPage = document.referrer && document.referrer !== window.location.href
+    ? document.referrer
+    : "/";
+
+  let timeLeft = REDIRECT_TIME;
+
+  if(timer){
+    timer.textContent = timeLeft;
+  }
+
+  if(bar){
+    bar.style.transitionDuration = REDIRECT_TIME + "s";
+    setTimeout(()=> bar.style.width = "100%",50);
+  }
+
+  const interval = setInterval(()=>{
+
+    timeLeft--;
+
+    if(timer){
+      timer.textContent = timeLeft;
+    }
+
+    if(timeLeft <= 0){
+      clearInterval(interval);
+
+      document.querySelector(".redirect-content").innerHTML =
+        "Redirecting...";
+
+      setTimeout(()=>{
+        window.location.href = previousPage;
+      },400);
+    }
+
+  },1000);
+
+})();
   </script>
 </body>
 </html>

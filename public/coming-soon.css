@@ -468,3 +468,74 @@
   .cs-countdown { gap: 0.6rem; }
   .cs-sep  { font-size: 1.5rem; }
 }
+
+
+/* ================================
+   FLOATING REDIRECT BANNER
+================================ */
+
+.redirect-banner{
+  position:fixed;
+  top:50px;
+  left:50%;
+  transform:translateX(-50%) translateY(-20px);
+  z-index:999;
+  opacity:0;
+  animation:redirectFadeIn .6s ease forwards;
+}
+
+.redirect-content{
+  display:flex;
+  align-items:center;
+  gap:12px;
+  padding:10px 16px;
+  border-radius:999px;
+
+  background:rgba(255,255,255,0.85);
+  backdrop-filter:blur(14px);
+
+  border:1px solid var(--border);
+  box-shadow:0 10px 30px rgba(0,0,0,0.08);
+
+  font-size:14px;
+  color:var(--text-primary);
+}
+
+[data-theme="dark"] .redirect-content{
+  background:rgba(20,24,35,0.75);
+}
+
+.redirect-icon{
+  font-size:14px;
+  opacity:.7;
+}
+
+.redirect-progress{
+  width:80px;
+  height:4px;
+  background:rgba(0,0,0,0.08);
+  border-radius:6px;
+  overflow:hidden;
+}
+
+[data-theme="dark"] .redirect-progress{
+  background:rgba(255,255,255,0.08);
+}
+
+.redirect-bar{
+  height:100%;
+  width:0%;
+  background:linear-gradient(90deg,var(--accent-primary),var(--accent-gold));
+  transition:width linear;
+}
+
+@keyframes redirectFadeIn{
+  from{
+    opacity:0;
+    transform:translateX(-50%) translateY(-15px);
+  }
+  to{
+    opacity:1;
+    transform:translateX(-50%) translateY(0);
+  }
+}
