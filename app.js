@@ -45,7 +45,9 @@ const Contact = mongoose.model('Contact', contactSchema);
 
 /* ── Nodemailer transporter ── */
 const transporter = nodemailer.createTransport({
-  service: 'gmail',
+  host: "smtp.gmail.com",
+  port: 465,
+  secure: true,
   auth: {
     user: process.env.GMAIL_USER,
     pass: process.env.GMAIL_APP_PASSWORD
@@ -241,7 +243,7 @@ app.post('/api/admin/contacts/:id/reply', requireAdmin, async (req, res) => {
 
     /* ── Send email ── */
     await transporter.sendMail({
-      from: `"UNI-SERVICES" <${process.env.GMAIL_USER}>`,
+      from: process.env.GMAIL_USER,       
       to: contact.email,
       subject: emailSubject,
       html: htmlBody,
